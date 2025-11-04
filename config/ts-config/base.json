@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "allowJs": false,
+    "strict": true,
+    "declaration": true,
+    "composite": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "module": "CommonJS"
+  }
+}
