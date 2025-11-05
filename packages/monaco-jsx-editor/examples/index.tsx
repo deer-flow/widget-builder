@@ -2,12 +2,31 @@ import { Editor, EditorProps } from "@monaco-editor/react";
 import { JSXLanguage } from "../src";
 import { exampleComponents } from "./component-types";
 import { createRoot } from "react-dom/client";
+import { JSONSchema4 } from "json-schema";
 
-const jsx = new JSXLanguage({ components: exampleComponents });
+const dataSchema: JSONSchema4 = {
+  type: "object",
+  properties: {
+    user: {
+      type: "object",
+      properties: {
+        id: { type: "string" },
+        name: { type: "string" },
+        age: { type: "number" },
+      },
+      required: ["id", "name"],
+    },
+    isAdmin: { type: "boolean" },
+  },
+  required: ["user"],
+};
+
+const jsx = new JSXLanguage({ components: exampleComponents, dataSchema });
 
 const defaultJSx = `
 <Card title="Welcome to Monaco JSX Editor">
-    <Button text="Click Me" variant="primary" onClick={() => alert('Button Clicked!')} />
+    <Text label={data.user.name} />
+    <Button text="Click Me" variant="primary" />
 </Card>
 `;
 

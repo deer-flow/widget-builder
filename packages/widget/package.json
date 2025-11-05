@@ -1,0 +1,36 @@
+{
+  "name": "@deer-flow/widget",
+  "version": "1.0.0",
+  "type": "module",
+  "types": "./dist/types/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/es/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc --build tsconfig.build.json",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:watch": "vitest watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --config ../../config/eslint-config/prettier.config.mjs --write .",
+    "format:check": "prettier --config ../../config/eslint-config/prettier.config.mjs --check .",
+    "type-check": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "^24.10.0",
+    "@widget-builder/eslint-config": "workspace:*",
+    "@widget-builder/ts-config": "workspace:*",
+    "eslint": "~9.39.1",
+    "prettier": "^3.6.2",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.12",
+    "vitest": "^4.0.7"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.28.5",
+    "@babel/types": "^7.28.5"
+  }
+}

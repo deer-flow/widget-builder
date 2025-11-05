@@ -4,17 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm -r build",
-    "dev": "pnpm -r dev",
-    "lint": "pnpm -r lint",
-    "lint:fix": "pnpm -r lint:fix",
+    "build": "turbo run build",
+    "dev": "turbo watch dev",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
     "format": "prettier --config ./config/eslint-config/prettier.config.mjs --write .",
     "format:check": "prettier --config ./config/eslint-config/prettier.config.mjs --check .",
-    "type-check": "pnpm -r type-check"
+    "type-check": "turbo run type-check",
+    "test": "turbo run test",
+    "test:run": "turbo run test:run"
   },
   "devDependencies": {
-    "eslint": "~9.12.0",
-    "prettier": "^3.6.2"
+    "eslint": "~9.39.1",
+    "prettier": "^3.6.2",
+    "turbo": "^2.6.0"
   },
   "packageManager": "pnpm@10.11.1"
 }

@@ -1,7 +1,6 @@
 import { ComponentDefinition } from "../src/types";
-import { generateComponentTypes } from "../src/jsx/ComponentTypes";
 
-// 示例组件定义
+// 基础示例组件定义
 const exampleComponents: ComponentDefinition[] = [
   {
     name: "Button",
@@ -45,6 +44,25 @@ const exampleComponents: ComponentDefinition[] = [
       },
     ],
   },
+  {
+    name: "Text",
+    description: "A simple text display component",
+    props: [
+      {
+        name: "label",
+        type: "string",
+        required: true,
+        description: "The text content to display",
+      },
+    ],
+  },
 ];
 
-export { exampleComponents };
+// 完整的 widget-components 定义（从 widget-builder 应用导入）
+// 注意：实际项目中应该从 widget-builder 包导入
+const widgetComponents: ComponentDefinition[] = [
+  // 这里可以导入完整的 widget-components 定义
+  // import { widgetComponentDefinitions } from "@widget-builder/widget-components";
+];
+
+export { exampleComponents, widgetComponents };

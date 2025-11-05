@@ -1,0 +1,15 @@
+{
+  "extends": "@widget-builder/ts-config/web.json",
+  "compilerOptions": {
+    "types": ["node", "react", "react-dom"],
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "./dist/types",
+    "rootDir": "./",
+    "outDir": "./dist/es",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

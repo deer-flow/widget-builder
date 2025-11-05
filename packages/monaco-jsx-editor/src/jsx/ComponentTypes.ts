@@ -24,15 +24,27 @@ const generatePropType = (prop: ComponentProp): string => {
  * Generate property interface for a single component
  */
 const generateComponentInterface = (component: ComponentDefinition): string => {
-  const propsDeclaration = component.props
+  // Filter out 'children' prop as it should be handled by JSX children, not as a required attribute
+  const filteredProps = component.props.filter(
+    (prop) => prop.name !== "children"
+  );
+
+  const propsDeclaration = filteredProps
     .map((prop) => generatePropType(prop))
     .join("\n");
+
+  // Add children separately as optional since it's handled by JSX
+  const hasChildren = component.props.some((prop) => prop.name === "children");
+  const childrenDeclaration = hasChildren
+    ? `\n    /** JSX children content */\n    children?: React.ReactNode;`
+    : "";
+
   const description = component.description
     ? `\n  /** ${component.description} */`
     : "";
 
   return `${description}
-  interface ${component.name}Props {${propsDeclaration}
+  interface ${component.name}Props {${propsDeclaration}${childrenDeclaration}
   }`;
 };
 
@@ -41,19 +53,6 @@ const generateComponentInterface = (component: ComponentDefinition): string => {
  */
 const generateIntrinsicElement = (component: ComponentDefinition): string => {
   return `    ${component.name}: ${component.name}Props;`;
-};
-
-/**
- * Generate global type declaration for the component
- */
-const generateGlobalComponentDeclaration = (
-  component: ComponentDefinition
-): string => {
-  const description = component.description
-    ? `\n  /** ${component.description} */`
-    : "";
-  return `${description}
-  const ${component.name}: React.ComponentType<${component.name}Props>;`;
 };
 
 /**
@@ -79,9 +78,6 @@ declare global {
     .map(generateComponentInterface)
     .join("\n\n");
   const intrinsicElements = components.map(generateIntrinsicElement).join("\n");
-  const globalDeclarations = components
-    .map(generateGlobalComponentDeclaration)
-    .join("\n\n");
 
   return `
 // Auto-generated component types for Monaco Editor
@@ -117,7 +113,7 @@ export {};
 export function generateComponentSnippets(components: ComponentDefinition[]) {
   return components.map((def) => {
     const requiredProps = def.props
-      .filter((prop) => prop.required)
+      .filter((prop) => prop.required && prop.name !== "children") // Exclude children from required props
       .map((prop) => {
         if (prop.type === "string") {
           return `${prop.name}="$\{1:${prop.defaultValue || "value"}}"`;
@@ -137,7 +133,7 @@ export function generateComponentSnippets(components: ComponentDefinition[]) {
       return {
         name: def.name,
         description: def.description,
-        insertText: `${def.name}${requiredProps.length > 0 ? " " + requiredProps.join(" ") : ""}>\n  $\{0:children}\n</${name}>`,
+        insertText: `${def.name}${requiredProps.length > 0 ? " " + requiredProps.join(" ") : ""}>\n  $\{0:children}\n</${def.name}>`,
       };
     } else {
       return {
