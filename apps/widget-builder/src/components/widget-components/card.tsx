@@ -4,7 +4,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { Background, Border, variants, Padding, Radius, VariantsProps, Width } from "./variants";
 import { ComponentDefinition } from "monaco-jsx-editor";
 
-const Base = cva("rounded-xl border bg-card text-card-foreground shadow p-2", {
+const Base = cva("rounded-2xl border bg-card text-card-foreground shadow p-4", {
   variants: {
     variant: {
       default: "border-border",

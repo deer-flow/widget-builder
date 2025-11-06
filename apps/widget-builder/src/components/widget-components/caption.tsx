@@ -1,14 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import {
-  variants,
-  FontSize,
-  FontWeight,
-  TextAlign,
-  TextColor,
-  Truncate,
-  VariantsProps,
-} from "./variants";
+import { variants, FontSize, FontWeight, TextAlign, TextColor, Truncate, VariantsProps } from "./variants";
 
 const Variants = variants({
   size: FontSize,
@@ -33,21 +25,7 @@ export interface CaptionProps
 }
 
 const Caption = React.forwardRef<HTMLSpanElement, CaptionProps>(
-  (
-    {
-      className,
-      children,
-      style,
-      as: Component = "span",
-      size,
-      weight,
-      color,
-      textAlign,
-      truncate,
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, children, style, as: Component = "span", size, weight, color, textAlign, truncate, ...props }, ref) => {
     const [variantClasses, variantStyles] = Variants.format({
       ...VariantsDefault,
       size,
@@ -58,7 +36,7 @@ const Caption = React.forwardRef<HTMLSpanElement, CaptionProps>(
     });
     return (
       <Component
-        className={cn("leading-relaxed", variantClasses, className)}
+        className={cn("leading-relaxed text-sm text-muted-foreground", variantClasses, className)}
         style={{ ...style, ...variantStyles }}
         ref={ref}
         {...props}
@@ -73,8 +51,7 @@ Caption.displayName = "Caption";
 
 const CaptionDefinition = {
   name: "Caption",
-  description:
-    "A text component for displaying captions with customizable styling.",
+  description: "A text component for displaying captions with customizable styling.",
   props: Variants.definitions,
 };
 

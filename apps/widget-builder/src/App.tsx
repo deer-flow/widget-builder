@@ -12,8 +12,9 @@ function App() {
         <SidebarInset>
           <div className="flex h-full flex-1 flex-col">
             <Routes>
-              <Route path="/" element={<Navigate to="/builder" replace />} />
-              <Route path="/builder" element={<WidgetBuilder />} />
+              <Route path="/" element={<Navigate to="/editor" replace />} />
+              <Route path="/editor" element={<WidgetBuilder />} />
+              <Route path="/editor/:id" element={<WidgetBuilder />} />
               <Route path="/gallery" element={<WidgetGallery />} />
             </Routes>
           </div>

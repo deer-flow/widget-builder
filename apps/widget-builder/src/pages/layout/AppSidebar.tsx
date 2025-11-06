@@ -1,40 +1,16 @@
-import { Grid3X3, LayoutTemplate, Plus } from "lucide-react";
+import { LayoutTemplate, PlusCircleIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
-const navigationItems = [
-  {
-    title: "New widget",
-    icon: Plus,
-    isActive: false,
-  },
-  {
-    title: "Gallery",
-    icon: Grid3X3,
-    isActive: false,
-  },
-];
-
-const widgetItems = [
-  { title: "Flight Tracker" },
-  { title: "Create Task" },
-  { title: "Enable Notification" },
-  { title: "purchaseItems" },
-  { title: "purchaseItems" },
-  { title: "Untitled widget" },
-  { title: "Untitled widget" },
-  { title: "weatherForecast" },
-  { title: "Untitled widget" },
-];
+import { MyWidgets } from "./MyWidgets";
+import { Link } from "react-router-dom";
 
 export function AppSidebar() {
   return (
@@ -61,32 +37,23 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigationItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton isActive={item.isActive} tooltip={item.title}>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                  tooltip="Create New Widget"
+                  asChild
+                >
+                  <Link to="/editor">
+                    <PlusCircleIcon />
+                    <span>New Widget</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Widgets</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {widgetItems.map((item, index) => (
-                <SidebarMenuItem key={`${item.title}-${index}`}>
-                  <SidebarMenuButton tooltip={item.title}>
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <MyWidgets />
       </SidebarContent>
     </Sidebar>
   );
