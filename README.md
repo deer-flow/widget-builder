@@ -28,9 +28,6 @@ It provides a Monaco-based JSX editor, a JSON state editor, a JSX→schema parse
   pnpm --filter @widget-builder/app dev
   ```
 
-```
-
 ## License
 
 MIT License.
-```
