@@ -5,11 +5,10 @@ import { widgetsStore } from "@/store/widgets-store";
 export const defaultWidgetTemplate: Omit<Widget, "id"> = {
   name: "Untitled Widget",
   description: "A widget to track flight information",
-  template: `
-<Card size="sm">
-  <Title level="h2">{data.eta}</Title>
+  template: `<Card size="sm">
+  <Title level="h3">{data.eta}</Title>
 
-  <Row align="center">
+  <Row align="center" gap={2}>
     <Col minWidth="auto">
       <Caption>Pick up</Caption>
       <Text truncate>{data.address}</Text>
@@ -26,7 +25,7 @@ export const defaultWidgetTemplate: Omit<Widget, "id"> = {
       radius="full"
     />
   </Row>
-</Card>
+</Card> 
     `,
   states: [
     {
