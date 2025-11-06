@@ -1,6 +1,7 @@
 # Widget Builder
 
-Widget Builder has been replicated from https://widgets.chatkit.studio/
+Widget Builder is an independent, open-source reproduction/implementation of https://widgets.chatkit.studio/.
+This project is a community-maintained clone for educational and development purposes and is not affiliated with the original project.
 
 ![Demo](./docs/image.png)
 
