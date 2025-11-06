@@ -4,6 +4,8 @@ Widget Builder has been replicated from https://widgets.chatkit.studio/
 
 It provides a Monaco-based JSX editor, a JSON state editor, a JSX→schema parser, and a lightweight preview renderer.
 
+![Demo](./docs/image.png)
+
 **Features**
 
 - **Monaco-based JSX editor:** Interactive code editor with JSX language support provided by the local `packages/monaco-jsx-editor`.
