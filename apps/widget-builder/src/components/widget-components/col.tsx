@@ -4,39 +4,57 @@ import { cva } from "class-variance-authority";
 import {
   Background,
   Border,
-  combine,
+  variants,
   Padding,
   Radius,
   VariantsProps,
   Flex,
-} from "./props";
+  Align,
+  MinWidth,
+  MinHeight,
+} from "./variants";
 import { ComponentDefinition } from "monaco-jsx-editor";
 
-const colBase = cva("flex flex-col", {
+const Base = cva("flex flex-col", {
   variants: {},
   defaultVariants: {},
 });
 
-const combined = combine({
+const Variants = variants({
+  align: Align,
   padding: Padding,
   background: Background,
   border: Border,
   radius: Radius,
   flex: Flex,
+  minWidth: MinWidth,
+  minHeight: MinHeight,
 });
 
-export interface ColProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantsProps<typeof combined> {
+export interface ColProps extends React.HTMLAttributes<HTMLDivElement>, VariantsProps<typeof Variants> {
   children?: React.ReactNode;
 }
 
 const Col = React.forwardRef<HTMLDivElement, ColProps>(
-  ({ className, children, style, ...props }, ref) => {
+  (
+    { className, children, style, align, padding, background, border, radius, flex, minWidth, minHeight, ...props },
+    ref
+  ) => {
+    const [variantClasses, variantStyles] = Variants.format({
+      align,
+      padding,
+      background,
+      border,
+      radius,
+      flex,
+      minWidth,
+      minHeight,
+    });
     return (
       <div
-        className={cn(colBase(), combined.format(props), className)}
-        style={style}
+        className={cn("group/col", Base(), variantClasses, className)}
+        data-widget-component="Col"
+        style={{ ...style, ...variantStyles }}
         ref={ref}
         {...props}
       >
@@ -48,10 +66,10 @@ const Col = React.forwardRef<HTMLDivElement, ColProps>(
 
 Col.displayName = "Col";
 
-const definition: ComponentDefinition = {
+const ColDefinition: ComponentDefinition = {
   name: "Col",
   description: "A column flex container component with customizable styling.",
-  props: combined.definitions,
+  props: Variants.definitions,
 };
 
-export { Col, definition };
+export { Col, ColDefinition };

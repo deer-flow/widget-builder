@@ -23,10 +23,12 @@ export const Padding = {
     description:
       "Padding; accepts a padding token or a custom px number value.",
   },
-  format: (padding: PaddingProps["padding"]): string => {
+  format: (
+    padding: PaddingProps["padding"]
+  ): string | [string, React.CSSProperties] => {
     if (padding === undefined) return "";
     if (typeof padding === "number") {
-      return `p-[${padding}px]`;
+      return ["", { padding: `${padding}px` }];
     }
     if (Padding.variant.hasOwnProperty(padding)) {
       return Padding.variant[padding as keyof typeof Padding.variant];
@@ -59,10 +61,12 @@ export const Margin = {
     required: false,
     description: "Margin; accepts a margin token or a custom px number value.",
   },
-  format: (margin: MarginProps["margin"]): string => {
+  format: (
+    margin: MarginProps["margin"]
+  ): string | [string, React.CSSProperties] => {
     if (margin === undefined) return "";
     if (typeof margin === "number") {
-      return `m-[${margin}px]`;
+      return ["", { margin: `${margin}px` }];
     }
     if (Margin.variant.hasOwnProperty(margin)) {
       return Margin.variant[margin as keyof typeof Margin.variant];

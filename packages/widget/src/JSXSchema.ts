@@ -134,7 +134,7 @@ class BabelJSXParser {
       type: "element",
       name,
       props,
-      children,
+      children: children.length > 0 ? children : undefined,
       position: this.getNodePosition(element),
     };
   }
@@ -148,7 +148,7 @@ class BabelJSXParser {
       type: "element",
       name: "Fragment",
       props: {},
-      children,
+      children: children.length > 0 ? children : undefined,
       position: this.getNodePosition(fragment),
     };
   }

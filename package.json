@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo watch dev",
+    "dev": "turbo watch dev --filter @widget-builder/app",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --config ./config/eslint-config/prettier.config.mjs --write .",

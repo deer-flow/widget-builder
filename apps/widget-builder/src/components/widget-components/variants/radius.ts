@@ -27,17 +27,19 @@ export const Radius = {
     description:
       "Border radius; accepts a radius token, a custom px number value, or a percentage string.",
   },
-  format: (radius: RadiusProps["radius"]): string => {
+  format: (
+    radius: RadiusProps["radius"]
+  ): string | [string, React.CSSProperties] => {
     if (radius === undefined) return "";
 
     if (typeof radius === "number") {
-      return `rounded-[${radius}px]`;
+      return ["", { borderRadius: `${radius}px` }];
     }
 
     if (typeof radius === "string") {
       // Check if it's a percentage value
       if (radius.endsWith("%")) {
-        return `rounded-[${radius}]`;
+        return ["", { borderRadius: `${radius}` }];
       }
 
       // Check if it's a predefined variant

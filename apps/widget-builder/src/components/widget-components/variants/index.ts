@@ -1,4 +1,5 @@
 import { ComponentProp } from "monaco-jsx-editor";
+import { Variant } from "./types";
 
 // Re-export all variant maps
 export * from "./typography";
@@ -22,19 +23,14 @@ export * from "./flex";
  * Combined.format({ padding: 'md', margin: 10 })
  * -> "p-4 m-[10px]"
  */
-export function combine<
-  T extends Record<
-    string,
-    { variant: any; definition: any; format: (value: any) => string }
-  >,
->(
+export function variants<T extends Record<string, Variant>>(
   variantMaps: T
 ): {
   variants: { [K in keyof T]: T[K]["variant"] };
   definitions: ComponentProp[];
   format: (values: {
     [K in keyof T]?: Parameters<T[K]["format"]>[0];
-  }) => string;
+  }) => readonly [string, React.CSSProperties];
 } {
   // Merge all variant maps
   const variants = Object.keys(variantMaps).reduce((acc, key) => {
@@ -44,17 +40,33 @@ export function combine<
 
   // Merge all definitions
   const definitions = Object.keys(variantMaps).reduce((acc, key) => {
-    acc.push(variantMaps[key].definition);
+    acc.push({
+      ...variantMaps[key].definition,
+      name: key,
+    });
     return acc;
   }, [] as ComponentProp[]);
 
   // Create combined format function
   const format = (values: any) => {
-    return Object.keys(values)
-      .filter((key) => values[key] !== undefined && variantMaps[key])
-      .map((key) => variantMaps[key].format(values[key]))
-      .filter(Boolean)
-      .join(" ");
+    const classNames: string[] = [];
+    const styles: React.CSSProperties = {};
+
+    Object.keys(values).forEach((key) => {
+      if (!(key in variantMaps)) {
+        console.warn(`Unknown variant key: ${key} in`, variantMaps);
+        return;
+      }
+      const result = variantMaps[key].format(values[key]);
+      if (typeof result === "string") {
+        classNames.push(result);
+      } else if (Array.isArray(result)) {
+        classNames.push(result[0]);
+        Object.assign(styles, result[1]);
+      }
+    });
+
+    return [classNames.join(" "), styles] as const;
   };
 
   return { variants, definitions, format };
@@ -62,14 +74,9 @@ export function combine<
 
 /**
  * Utility type to extract format parameter type from combine result
- *
- * @example
- * const Combined = combine({padding: Padding, margin: Margin});
- * type FormatParams = GetFormatParams<typeof Combined>;
- * // FormatParams = { padding?: PaddingValue; margin?: MarginValue }
  */
 export type VariantsProps<T> = T extends {
-  format: (values: infer P) => string;
+  format: (values: infer P) => any;
 }
   ? P
   : never;

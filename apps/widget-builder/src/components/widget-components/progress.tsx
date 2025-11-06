@@ -1,29 +1,27 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import { ComponentDefinition } from "monaco-jsx-editor";
 
-const progressVariants = cva(
-  "relative overflow-hidden rounded-full bg-secondary",
-  {
-    variants: {
-      size: {
-        sm: "h-2",
-        default: "h-4",
-        lg: "h-6",
-      },
-      variant: {
-        default: "bg-secondary",
-        muted: "bg-muted",
-      },
+const ProgressBase = cva("relative overflow-hidden rounded-full bg-secondary", {
+  variants: {
+    size: {
+      sm: "h-2",
+      default: "h-4",
+      lg: "h-6",
     },
-    defaultVariants: {
-      size: "default",
-      variant: "default",
+    variant: {
+      default: "bg-secondary",
+      muted: "bg-muted",
     },
-  }
-);
+  },
+  defaultVariants: {
+    size: "default",
+    variant: "default",
+  },
+});
 
-const progressBarVariants = cva("h-full w-full flex-1 transition-all", {
+const ProgressBarBase = cva("h-full w-full flex-1 transition-all", {
   variants: {
     color: {
       primary: "bg-primary",
@@ -40,10 +38,10 @@ const progressBarVariants = cva("h-full w-full flex-1 transition-all", {
 
 export interface ProgressProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "color">,
-    VariantProps<typeof progressVariants> {
+    VariantProps<typeof ProgressBase> {
   value?: number;
   max?: number;
-  color?: VariantProps<typeof progressBarVariants>["color"];
+  color?: VariantProps<typeof ProgressBarBase>["color"];
   showValue?: boolean;
 }
 
@@ -66,12 +64,12 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     return (
       <div className="w-full space-y-2">
         <div
-          className={cn(progressVariants({ size, variant, className }))}
+          className={cn(ProgressBase({ size, variant, className }))}
           ref={ref}
           {...props}
         >
           <div
-            className={cn(progressBarVariants({ color }))}
+            className={cn(ProgressBarBase({ color }))}
             style={{ transform: `translateX(-${100 - percentage}%)` }}
           />
         </div>
@@ -89,4 +87,46 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
 );
 Progress.displayName = "Progress";
 
-export { Progress, progressVariants, progressBarVariants };
+const ProgressDefinition: ComponentDefinition = {
+  name: "Progress",
+  description: "A progress bar component",
+  props: [
+    {
+      name: "value",
+      type: "number",
+      required: false,
+      description: "Current progress value",
+      defaultValue: 0,
+    },
+    {
+      name: "max",
+      type: "number",
+      required: false,
+      description: "Maximum progress value",
+      defaultValue: 100,
+    },
+    {
+      name: "size",
+      type: '"sm" | "default" | "lg"',
+      required: false,
+      description: "Progress bar size",
+      defaultValue: "default",
+    },
+    {
+      name: "color",
+      type: '"primary" | "secondary" | "success" | "warning" | "danger"',
+      required: false,
+      description: "Progress bar color",
+      defaultValue: "primary",
+    },
+    {
+      name: "showValue",
+      type: "boolean",
+      required: false,
+      description: "Show progress value text",
+      defaultValue: false,
+    },
+  ],
+};
+
+export { Progress, ProgressDefinition };

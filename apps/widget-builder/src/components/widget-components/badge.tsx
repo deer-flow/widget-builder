@@ -1,8 +1,9 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import { ComponentDefinition } from "monaco-jsx-editor";
 
-const badgeVariants = cva(
+const Base = cva(
   "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
   {
     variants: {
@@ -34,7 +35,7 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {
+    VariantProps<typeof Base> {
   children: React.ReactNode;
 }
 
@@ -42,7 +43,7 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
   ({ className, variant, size, ...props }, ref) => {
     return (
       <div
-        className={cn(badgeVariants({ variant, size, className }))}
+        className={cn(Base({ variant, size, className }))}
         ref={ref}
         {...props}
       />
@@ -51,4 +52,28 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
 );
 Badge.displayName = "Badge";
 
-export { Badge, badgeVariants };
+const BadgeDefinition: ComponentDefinition = {
+  name: "Badge",
+  description: "A badge component for displaying status or notifications.",
+  props: [
+    {
+      name: "variant",
+      type: "'default' | 'secondary' | 'destructive' | 'outline' | 'success' | 'warning'",
+      defaultValue: "default",
+      description: "The visual style of the badge.",
+    },
+    {
+      name: "size",
+      type: "'sm' | 'default' | 'lg'",
+      defaultValue: "default",
+      description: "The size of the badge.",
+    },
+    {
+      name: "children",
+      type: "React.ReactNode",
+      description: "Content to display inside the badge.",
+    },
+  ],
+};
+
+export { Badge, BadgeDefinition };

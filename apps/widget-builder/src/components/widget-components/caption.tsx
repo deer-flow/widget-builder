@@ -1,16 +1,16 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import {
-  combine,
+  variants,
   FontSize,
   FontWeight,
   TextAlign,
   TextColor,
   Truncate,
   VariantsProps,
-} from "./props";
+} from "./variants";
 
-const combined = combine({
+const Variants = variants({
   size: FontSize,
   weight: FontWeight,
   color: TextColor,
@@ -18,7 +18,7 @@ const combined = combine({
   truncate: Truncate,
 });
 
-const defaultVariants = {
+const VariantsDefault = {
   size: "md",
   weight: "normal",
   color: "secondary",
@@ -28,26 +28,38 @@ const defaultVariants = {
 
 export interface CaptionProps
   extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">,
-    VariantsProps<typeof combined> {
+    VariantsProps<typeof Variants> {
   as?: React.ElementType;
 }
 
 const Caption = React.forwardRef<HTMLSpanElement, CaptionProps>(
-  ({ className, children, style, as: Component = "span", ...props }, ref) => {
-    // Build additional classes for properties not handled by variants
-    const inlineStyles: React.CSSProperties = {};
-
-    // Merge with existing style prop
-    const mergedStyles = { ...inlineStyles, ...style };
-
+  (
+    {
+      className,
+      children,
+      style,
+      as: Component = "span",
+      size,
+      weight,
+      color,
+      textAlign,
+      truncate,
+      ...props
+    },
+    ref
+  ) => {
+    const [variantClasses, variantStyles] = Variants.format({
+      ...VariantsDefault,
+      size,
+      weight,
+      color,
+      textAlign,
+      truncate,
+    });
     return (
       <Component
-        className={cn(
-          "leading-relaxed",
-          combined.format({ ...defaultVariants, ...props }),
-          className
-        )}
-        style={Object.keys(mergedStyles).length > 0 ? mergedStyles : undefined}
+        className={cn("leading-relaxed", variantClasses, className)}
+        style={{ ...style, ...variantStyles }}
         ref={ref}
         {...props}
       >
@@ -59,11 +71,11 @@ const Caption = React.forwardRef<HTMLSpanElement, CaptionProps>(
 
 Caption.displayName = "Caption";
 
-const definition = {
+const CaptionDefinition = {
   name: "Caption",
   description:
     "A text component for displaying captions with customizable styling.",
-  props: combined.definitions,
+  props: Variants.definitions,
 };
 
-export { Caption, definition };
+export { Caption, CaptionDefinition };

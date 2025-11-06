@@ -1,8 +1,10 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import { ComponentDefinition } from "monaco-jsx-editor";
+import { FontSize, FontWeight, Truncate, variants, VariantsProps } from "./variants";
 
-const textVariants = cva("text-foreground", {
+const Base = cva("text-foreground", {
   variants: {
     variant: {
       body: "text-sm",
@@ -10,46 +12,45 @@ const textVariants = cva("text-foreground", {
       caption: "text-xs text-muted-foreground",
       muted: "text-sm text-muted-foreground",
     },
-    size: {
-      xs: "text-xs",
-      sm: "text-sm",
-      base: "text-base",
-      lg: "text-lg",
-      xl: "text-xl",
-    },
-    weight: {
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-    },
   },
   defaultVariants: {
     variant: "body",
   },
 });
 
+const Variants = variants({
+  size: FontSize,
+  weight: FontWeight,
+  truncate: Truncate,
+});
+
 export interface TextProps
   extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof textVariants> {
+    VariantProps<typeof Base>,
+    VariantsProps<typeof Variants> {
   as?: React.ElementType;
   children: React.ReactNode;
 }
 
 const Text = React.forwardRef<HTMLSpanElement, TextProps>(
-  (
-    { className, variant, size, weight, as: Component = "span", ...props },
-    ref
-  ) => {
-    return (
-      <Component
-        className={cn(textVariants({ variant, size, weight, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
+  ({ className, variant, as: Component = "span", size, weight, truncate, ...props }, ref) => {
+    const [variantClasses, variantStyles] = Variants.format({ size, weight, truncate });
+    return <Component className={cn(Base({ variant, className }), variantClasses)} ref={ref} {...props} />;
   }
 );
 Text.displayName = "Text";
 
-export { Text, textVariants };
+const TextDefinition: ComponentDefinition = {
+  name: "Text",
+  description: "A text component with customizable variants and styles.",
+  props: [
+    {
+      name: "variant",
+      type: "'body' | 'label' | 'caption' | 'muted'",
+      defaultValue: "body",
+      description: "The variant style of the text.",
+    },
+    ...Variants.definitions,
+  ],
+};
+export { Text, TextDefinition };

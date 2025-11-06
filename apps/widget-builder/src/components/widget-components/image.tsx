@@ -1,22 +1,16 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import { variants, Margin, Radius, Size, VariantsProps } from "./variants";
+import { ComponentDefinition } from "monaco-jsx-editor";
 
-const imageVariants = cva("object-cover", {
+const Base = cva("object-cover", {
   variants: {
     fit: {
       cover: "object-cover",
       contain: "object-contain",
       fill: "object-fill",
       "scale-down": "object-scale-down",
-    },
-    rounded: {
-      none: "rounded-none",
-      sm: "rounded-sm",
-      md: "rounded-md",
-      lg: "rounded-lg",
-      xl: "rounded-xl",
-      full: "rounded-full",
     },
     aspect: {
       auto: "aspect-auto",
@@ -25,22 +19,36 @@ const imageVariants = cva("object-cover", {
       "4/3": "aspect-[4/3]",
       "3/2": "aspect-[3/2]",
     },
+    position: {
+      center: "object-center",
+      top: "object-top",
+      bottom: "object-bottom",
+      left: "object-left",
+      right: "object-right",
+    },
   },
   defaultVariants: {
     fit: "cover",
-    rounded: "md",
     aspect: "auto",
+    position: "center",
   },
+});
+
+const Variants = variants({
+  radius: Radius,
+  margin: Margin,
+  size: Size,
 });
 
 export interface ImageProps
   extends React.ImgHTMLAttributes<HTMLImageElement>,
-    VariantProps<typeof imageVariants> {
+    VariantProps<typeof Base>,
+    VariantsProps<typeof Variants> {
   fallback?: React.ReactNode;
 }
 
 const Image = React.forwardRef<HTMLImageElement, ImageProps>(
-  ({ className, fit, rounded, aspect, fallback, onError, ...props }, ref) => {
+  ({ className, style, fit, aspect, position, fallback, radius, margin, size, onError, ...props }, ref) => {
     const [imageError, setImageError] = React.useState(false);
 
     const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -48,13 +56,17 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
       onError?.(e);
     };
 
+    const [variantClasses, variantStyles] = Variants.format({ radius, margin, size });
+
     if (imageError && fallback) {
       return (
         <div
           className={cn(
             "flex items-center justify-center bg-muted",
-            imageVariants({ fit, rounded, aspect, className })
+            Base({ fit, aspect, position, className }),
+            variantClasses
           )}
+          style={{ ...style, ...variantStyles }}
         >
           {fallback}
         </div>
@@ -63,7 +75,8 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
 
     return (
       <img
-        className={cn(imageVariants({ fit, rounded, aspect, className }))}
+        className={cn(Base({ fit, aspect, position, className }), variantClasses)}
+        style={{ ...style, ...variantStyles }}
         ref={ref}
         onError={handleError}
         {...props}
@@ -73,4 +86,41 @@ const Image = React.forwardRef<HTMLImageElement, ImageProps>(
 );
 Image.displayName = "Image";
 
-export { Image, imageVariants };
+const ImageDefinition: ComponentDefinition = {
+  name: "Image",
+  description: "An image component with customizable object fit, aspect ratio, and error fallback.",
+  props: [
+    {
+      name: "src",
+      type: "string",
+      description: "The source URL of the image.",
+      required: true,
+    },
+    {
+      name: "fit",
+      type: "'cover' | 'contain' | 'fill' | 'scale-down'",
+      defaultValue: "'cover'",
+      description: "Defines how the image should fit within its container.",
+    },
+    {
+      name: "position",
+      type: "'center' | 'top' | 'bottom' | 'left' | 'right'",
+      defaultValue: "'center'",
+      description: "Sets the position of the image within its container.",
+    },
+    {
+      name: "aspect",
+      type: "'auto' | 'square' | 'video' | '4/3' | '3/2'",
+      defaultValue: "'auto'",
+      description: "Sets the aspect ratio of the image.",
+    },
+    {
+      name: "fallback",
+      type: "React.ReactNode",
+      description: "Content to display if the image fails to load.",
+    },
+    ...Variants.definitions,
+  ],
+};
+
+export { Image, ImageDefinition };

@@ -1,36 +1,27 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import {
-  Background,
-  Border,
-  combine,
-  Padding,
-  Radius,
-  VariantsProps,
-} from "./props";
+import { Background, Border, variants, Padding, Radius, VariantsProps } from "./variants";
 import { ComponentDefinition } from "monaco-jsx-editor";
 
-const combined = combine({
+const Variants = variants({
   padding: Padding,
   background: Background,
   border: Border,
   radius: Radius,
 });
 
-export interface BoxProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantsProps<typeof combined> {
+export interface BoxProps extends React.HTMLAttributes<HTMLDivElement>, VariantsProps<typeof Variants> {
   as?: React.ElementType;
 }
 
 const Box = React.forwardRef<HTMLDivElement, BoxProps>(
-  ({ className, children, as: Component = "div", style, ...props }, ref) => {
+  ({ className, children, as: Component = "div", style, padding, background, border, radius, ...props }, ref) => {
     // Merge with existing style prop
-
+    const [variantClasses, variantStyles] = Variants.format({ padding, background, border, radius });
     return (
       <Component
-        className={cn("block", combined.format(props), className)}
-        style={style}
+        className={cn("block", variantClasses, className)}
+        style={{ ...style, ...variantStyles }}
         ref={ref}
         {...props}
       />
@@ -39,10 +30,10 @@ const Box = React.forwardRef<HTMLDivElement, BoxProps>(
 );
 Box.displayName = "Box";
 
-const definition: ComponentDefinition = {
+const BoxDefinition: ComponentDefinition = {
   name: "Box",
   description: "A versatile container component with customizable styling.",
-  props: combined.definitions,
+  props: Variants.definitions,
 };
 
-export { Box, definition };
+export { Box, BoxDefinition };

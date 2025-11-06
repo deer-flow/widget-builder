@@ -1,3 +1,5 @@
+import { Variant } from "./types";
+
 export const BackgroundVariant = {
   none: "bg-transparent",
   surface: "bg-background",
@@ -12,7 +14,7 @@ export interface BackgroundProps {
 }
 
 // Background object with variants and format methods
-export const Background = {
+export const Background: Variant = {
   // Background variants
   variant: BackgroundVariant,
 
@@ -20,8 +22,7 @@ export const Background = {
     name: "background",
     type: '"none" | "surface" | "surface-secondary" | "surface-tertiary" | "surface-elevated" | "surface-elevated-secondary" | string',
     required: false,
-    description:
-      "Background color; accepts a surface color token or a custom color value.",
+    description: "Background color; accepts a surface color token or a custom color value.",
   },
 
   // Format method to handle background colors

@@ -60,14 +60,16 @@ export function WidgetRenderer({
       }
 
       // Recursively render children
-      const children = schema.children?.map((child, index) => (
-        <WidgetRenderer
-          key={index}
-          schema={child}
-          components={components}
-          data={data}
-        />
-      ));
+      const children = schema.children
+        ? schema.children.map((child, index) => (
+            <WidgetRenderer
+              key={index}
+              schema={child}
+              components={components}
+              data={data}
+            />
+          ))
+        : undefined;
 
       return React.createElement(Component, props, children);
     }

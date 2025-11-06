@@ -6,15 +6,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Download, Share } from "lucide-react";
-import {
-  ComponentDefinitions,
-  components,
-} from "@/components/widget-components";
-import {
-  inferDataSchemaFromState,
-  parseJSXTemplate,
-  Widget,
-} from "@deer-flow/widget";
+import { definitions, components } from "@/components/widget-components";
+import { inferDataSchemaFromState, parseJSXTemplate, Widget } from "@deer-flow/widget";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const defaultWidget: Widget = {
@@ -23,21 +16,21 @@ const defaultWidget: Widget = {
   description: "A widget to track flight information",
   template: `
 <Card size="sm">
-  <Title level="h2">1 min</Title>
+  <Title level="h2">{data.eta}</Title>
 
   <Row align="center">
     <Col minWidth="auto">
-      <Caption value="Pick up" />
-      <Text value="1008 Mission St" truncate />
+      <Caption>Pick up</Caption>
+      <Text truncate>{data.address}</Text>
     </Col>
     <Spacer />
     <Col align="end">
-      <Caption value="Driver" />
-      <Text value="Jonathan" />
+      <Caption>Driver</Caption>
+      <Text>{data.driver.name}</Text>
     </Col>
 
     <Image
-      src="https://cdn.openai.com/API/storybook/driver.png"
+      src={data.driver.photo}
       size={40}
       radius="full"
     />
@@ -46,10 +39,12 @@ const defaultWidget: Widget = {
     `,
   states: {
     default: {
-      flightNumber: "AA123",
-      status: "On Time",
-      departure: "New York (JFK) - 10:00 AM",
-      arrival: "Los Angeles (LAX) - 1:00 PM",
+      eta: "1 min",
+      address: "1008 Mission St",
+      driver: {
+        name: "Jonathan",
+        photo: "https://cdn.openai.com/API/storybook/driver.png",
+      },
     },
   },
 };
@@ -103,9 +98,7 @@ export const WidgetBuilder = () => {
     <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <div className="h-14 border-b flex items-center justify-between px-4">
-        <h1 className="text-lg font-semibold">
-          {widget.name ?? "Untitled Widget"}
-        </h1>
+        <h1 className="text-lg font-semibold">{widget.name ?? "Untitled Widget"}</h1>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
             <Share className="h-4 w-4 mr-2" />
@@ -126,7 +119,7 @@ export const WidgetBuilder = () => {
             <JSXEditor
               value={widget.template || ""}
               onChange={handleTemplateChange}
-              components={ComponentDefinitions}
+              components={definitions}
               dataSchema={widget.dataSchema}
               options={{
                 minimap: { enabled: false },
@@ -157,9 +150,7 @@ export const WidgetBuilder = () => {
               </TabsContent>
 
               <TabsContent value="new-state" className="flex-1 m-0 p-4">
-                <div className="text-muted-foreground text-sm">
-                  Create a new state
-                </div>
+                <div className="text-muted-foreground text-sm">Create a new state</div>
               </TabsContent>
             </Tabs>
           </div>

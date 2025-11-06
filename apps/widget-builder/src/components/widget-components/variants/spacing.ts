@@ -23,10 +23,12 @@ export const Spacing = {
     description:
       "Spacing; accepts a spacing token or a custom px number value.",
   },
-  format: (spacing: SpacingProps["spacing"]): string => {
+  format: (
+    spacing: SpacingProps["spacing"]
+  ): string | [string, React.CSSProperties] => {
     if (spacing === undefined) return "";
     if (typeof spacing === "number") {
-      return `[${spacing}px]`;
+      return ["", { padding: `${spacing}px` }];
     }
     if (Spacing.variant.hasOwnProperty(spacing)) {
       return Spacing.variant[spacing as keyof typeof Spacing.variant];
@@ -61,13 +63,13 @@ export const Gap = {
     required: false,
     description: "Gap; accepts a gap token or a custom px number value.",
   },
-  format: (gap: GapProps["gap"]): string => {
+  format: (gap: GapProps["gap"]): string | [string, React.CSSProperties] => {
     if (gap === undefined) return "";
     if (Gap.variant.hasOwnProperty(gap)) {
       return Gap.variant[gap as keyof typeof Gap.variant];
     }
     if (typeof gap === "number") {
-      return `gap-[${gap}px]`;
+      return [``, { gap: `${gap}px` }];
     }
     return "";
   },

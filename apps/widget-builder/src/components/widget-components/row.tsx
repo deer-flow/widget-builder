@@ -1,56 +1,37 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { cva, type VariantProps } from "class-variance-authority";
-import {
-  Variants,
-  processCommonStylingProps,
-  type CommonStylingProps,
-  type FlexProps,
-} from "./props";
+import { cva } from "class-variance-authority";
+import { Background, Border, variants, Padding, Radius, VariantsProps, Flex, Align } from "./variants";
+import { ComponentDefinition } from "monaco-jsx-editor";
 
-const rowVariants = cva("flex flex-row", {
-  variants: {
-    align: Variants.align,
-    justify: Variants.justify,
-    wrap: Variants.wrap,
-    gap: Variants.gap,
-    padding: Variants.padding,
-    radius: Variants.radius,
-    background: Variants.background,
-  },
-  defaultVariants: {
-    align: undefined,
-    justify: undefined,
-    wrap: "nowrap",
-    gap: 0,
-    padding: "none",
-    radius: "none",
-    background: "none",
-  },
+const Base = cva("flex flex-row", {
+  variants: {},
+  defaultVariants: {},
 });
 
-export interface RowProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    CommonStylingProps,
-    FlexProps {
+const Variants = variants({
+  align: Align,
+  padding: Padding,
+  background: Background,
+  border: Border,
+  radius: Radius,
+  flex: Flex,
+});
+
+export interface RowProps extends React.HTMLAttributes<HTMLDivElement>, VariantsProps<typeof Variants> {
   children?: React.ReactNode;
 }
 
 const Row = React.forwardRef<HTMLDivElement, RowProps>(
-  ({ className, children, style, ...props }, ref) => {
-    // Process common styling props using the shared utility
-    const { additionalClasses, inlineStyles, restProps } =
-      processCommonStylingProps(props);
-
-    // Merge with existing style prop
-    const mergedStyles = { ...inlineStyles, ...style };
-
+  ({ className, children, style, align, padding, background, border, radius, flex, ...props }, ref) => {
+    const [variantClasses, variantStyles] = Variants.format({ align, padding, background, border, radius, flex });
     return (
       <div
-        className={cn(additionalClasses.join(" "), className)}
-        style={Object.keys(mergedStyles).length > 0 ? mergedStyles : undefined}
+        className={cn("group/row", Base(), variantClasses, className)}
+        data-widget-component="Row"
+        style={{ ...style, ...variantStyles }}
         ref={ref}
-        {...restProps}
+        {...props}
       >
         {children}
       </div>
@@ -60,4 +41,10 @@ const Row = React.forwardRef<HTMLDivElement, RowProps>(
 
 Row.displayName = "Row";
 
-export { Row, rowVariants };
+const RowDefinition: ComponentDefinition = {
+  name: "Row",
+  description: "A row flex container component with customizable styling.",
+  props: Variants.definitions,
+};
+
+export { Row, RowDefinition };

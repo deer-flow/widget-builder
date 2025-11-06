@@ -61,10 +61,12 @@ export const FontSize = {
     description:
       "Font size; accepts a font size token or a custom px number value.",
   },
-  format: (fontSize: TypographyProps["fontSize"]): string => {
+  format: (
+    fontSize: TypographyProps["fontSize"]
+  ): string | [string, React.CSSProperties] => {
     if (fontSize === undefined) return "";
     if (typeof fontSize === "number") {
-      return `[${fontSize}px]`;
+      return ["", { fontSize: `${fontSize}px` }];
     }
     if (FontSize.variant.hasOwnProperty(fontSize)) {
       return FontSize.variant[fontSize as keyof typeof FontSize.variant];

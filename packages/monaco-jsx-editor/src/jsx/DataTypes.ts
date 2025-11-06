@@ -4,28 +4,22 @@ import { JSONSchema4 } from "json-schema";
  * Convert a JSON Schema to TypeScript interface string
  * Browser-compatible implementation that doesn't require Node.js dependencies
  */
-export function generateDataTypes(
-  schema: JSONSchema4,
-  interfaceName: string = "WidgetData"
-): string {
+export function generateDataTypes(schema: JSONSchema4): string {
   try {
     // Simple TypeScript interface generation from JSON Schema
     const interfaceBody = generateInterfaceBody(schema);
 
-    return `interface ${interfaceName} {
+    return `
+declare const data: {
 ${interfaceBody}
-}
-
-declare const data: ${interfaceName};
+};
 `;
   } catch (error) {
     console.error("Error generating types from schema:", error);
     // Fallback to a basic interface
-    return `interface ${interfaceName} {
+    return `declare const data: {
   [key: string]: any;
-}
-
-declare const data: ${interfaceName};
+};
 `;
   }
 }
@@ -33,10 +27,7 @@ declare const data: ${interfaceName};
 /**
  * Generate TypeScript interface body from JSON Schema
  */
-function generateInterfaceBody(
-  schema: JSONSchema4,
-  indent: string = "  "
-): string {
+function generateInterfaceBody(schema: JSONSchema4, indent: string = "  "): string {
   if (!schema.properties) {
     return `${indent}[key: string]: any;`;
   }
@@ -46,8 +37,7 @@ function generateInterfaceBody(
   for (const [propName, propSchema] of Object.entries(schema.properties)) {
     const prop = propSchema as JSONSchema4;
     const optional =
-      !(Array.isArray(schema.required) && schema.required.includes(propName)) &&
-      prop.default === undefined;
+      !(Array.isArray(schema.required) && schema.required.includes(propName)) && prop.default === undefined;
     const propType = getTypeScriptType(prop);
     const questionMark = optional ? "?" : "";
 
@@ -99,9 +89,7 @@ function getTypeScriptType(schema: JSONSchema4): string {
 
   // Handle enum
   if (schema.enum) {
-    const enumValues = schema.enum.map((val) =>
-      typeof val === "string" ? `'${val}'` : String(val)
-    );
+    const enumValues = schema.enum.map((val) => (typeof val === "string" ? `'${val}'` : String(val)));
     return enumValues.join(" | ");
   }
 

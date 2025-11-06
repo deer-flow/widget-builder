@@ -1,8 +1,5 @@
 import * as Monaco from "monaco-editor";
-import {
-  getWorker,
-  MonacoJsxSyntaxHighlight,
-} from "monaco-jsx-syntax-highlight";
+import { getWorker, MonacoJsxSyntaxHighlight } from "monaco-jsx-syntax-highlight";
 import { JSONSchema4 } from "json-schema";
 
 import { ComponentDefinition } from "../types";
@@ -15,9 +12,7 @@ export type JSXLanguageOptions = {
   dataSchema?: JSONSchema4;
   allowedHTMLElements?: string[];
   disableAllHTMLElements?: boolean; // if true, no HTML elements are allowed
-  setupCompilerOptions?: (
-    monaco: typeof Monaco
-  ) => Monaco.languages.typescript.CompilerOptions;
+  setupCompilerOptions?: (monaco: typeof Monaco) => Monaco.languages.typescript.CompilerOptions;
 };
 
 export class JSXLanguage {
@@ -25,8 +20,7 @@ export class JSXLanguage {
 
   private jsxHighlighter: MonacoJsxSyntaxHighlight | null = null;
   private completionDisposable: Monaco.IDisposable | null = null;
-  private dataTypesDisposablTS: Monaco.IDisposable | null = null;
-  private dataTypesDisposableJS: Monaco.IDisposable | null = null;
+  private dataTypesDisposable: Monaco.IDisposable | null = null;
   private _dataSchema: JSONSchema4 | null = null;
   private monaco: typeof Monaco | null = null;
 
@@ -59,12 +53,10 @@ export class JSXLanguage {
       if (this.completionDisposable) {
         this.completionDisposable.dispose();
       }
-      if (this.dataTypesDisposablTS) {
-        this.dataTypesDisposablTS.dispose();
+      if (this.dataTypesDisposable) {
+        this.dataTypesDisposable.dispose();
       }
-      if (this.dataTypesDisposableJS) {
-        this.dataTypesDisposableJS.dispose();
-      }
+
       this.jsxHighlighter = null;
     });
   }
@@ -74,29 +66,18 @@ export class JSXLanguage {
     if (!this.monaco) {
       return;
     }
-    const tsDefaults = Monaco.languages.typescript.typescriptDefaults;
-    const jsDefaults = Monaco.languages.typescript.javascriptDefaults;
+    const tsDefaults = this.monaco.languages.typescript.typescriptDefaults;
     const dataTypesUri = "file:///data-types.d.ts";
 
     try {
       // Remove old data types if exists
-      if (this.dataTypesDisposablTS) {
-        this.dataTypesDisposablTS.dispose();
-      }
-      if (this.dataTypesDisposableJS) {
-        this.dataTypesDisposableJS.dispose();
+      if (this.dataTypesDisposable) {
+        this.dataTypesDisposable.dispose();
       }
 
       const typeDefinitions = generateDataTypes(schema);
       // Add the new type definitions to both TS and JS defaults
-      this.dataTypesDisposablTS = tsDefaults.addExtraLib(
-        typeDefinitions,
-        dataTypesUri
-      );
-      this.dataTypesDisposableJS = jsDefaults.addExtraLib(
-        typeDefinitions,
-        dataTypesUri
-      );
+      this.dataTypesDisposable = tsDefaults.addExtraLib(typeDefinitions, dataTypesUri);
 
       console.log("JSXLanguage: Updated data schema types", typeDefinitions);
     } catch (error) {
@@ -104,17 +85,11 @@ export class JSXLanguage {
     }
   }
 
-  private setupJsxHighlighting(
-    editor: Monaco.editor.IStandaloneCodeEditor,
-    monaco: typeof Monaco
-  ) {
+  private setupJsxHighlighting(editor: Monaco.editor.IStandaloneCodeEditor, monaco: typeof Monaco) {
     if (!this.jsxHighlighter) {
       this.jsxHighlighter = new MonacoJsxSyntaxHighlight(getWorker(), monaco);
 
-      const { highlighter } = this.jsxHighlighter.highlighterBuilder(
-        { editor },
-        { jsxTagCycle: 6 }
-      );
+      const { highlighter } = this.jsxHighlighter.highlighterBuilder({ editor }, { jsxTagCycle: 6 });
 
       console.log("MonacoJSXEditor: Initializing JSX syntax highlighter");
       highlighter();
@@ -143,12 +118,8 @@ export class JSXLanguage {
     const customOptions = this.options.setupCompilerOptions?.(monaco) || {};
     const mergedOptions = { ...defaultOptions, ...customOptions };
 
-    monaco.languages.typescript.typescriptDefaults.setCompilerOptions(
-      mergedOptions
-    );
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions(
-      mergedOptions
-    );
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions(mergedOptions);
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions(mergedOptions);
 
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
       noSemanticValidation: false,
@@ -167,36 +138,17 @@ export class JSXLanguage {
     const jsDefaults = monaco.languages.typescript.javascriptDefaults;
 
     // 添加 React 类型定义
-    tsDefaults.addExtraLib(
-      ReactTypes,
-      "file:///node_modules/@types/react/jsx-runtime.d.ts"
-    );
-    jsDefaults.addExtraLib(
-      ReactTypes,
-      "file:///node_modules/@types/react/jsx-runtime.d.ts"
-    );
+    tsDefaults.addExtraLib(ReactTypes, "file:///node_modules/@types/react/jsx-runtime.d.ts");
+    jsDefaults.addExtraLib(ReactTypes, "file:///node_modules/@types/react/jsx-runtime.d.ts");
 
     // 添加组件类型定义
-    tsDefaults.addExtraLib(
-      this.componentTypesLib,
-      "file:///widget-components.d.ts"
-    );
-    jsDefaults.addExtraLib(
-      this.componentTypesLib,
-      "file:///widget-components.d.ts"
-    );
+    tsDefaults.addExtraLib(this.componentTypesLib, "file:///widget-components.d.ts");
+    jsDefaults.addExtraLib(this.componentTypesLib, "file:///widget-components.d.ts");
 
     // 添加 data 类型定义（如果存在）
     if (this._dataSchema) {
       const dataTypesContent = generateDataTypes(this._dataSchema);
-      this.dataTypesDisposablTS = tsDefaults.addExtraLib(
-        dataTypesContent,
-        "file:///data-types.d.ts"
-      );
-      this.dataTypesDisposableJS = jsDefaults.addExtraLib(
-        dataTypesContent,
-        "file:///data-types.d.ts"
-      );
+      this.dataTypesDisposable = tsDefaults.addExtraLib(dataTypesContent, "file:///data-types.d.ts");
     }
   }
 }

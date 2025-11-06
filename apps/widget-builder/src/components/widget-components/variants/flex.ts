@@ -1,6 +1,3 @@
-import { format } from "path";
-import { definition } from "../box";
-
 export const AlignVariant = {
   start: "items-start",
   center: "items-center",
