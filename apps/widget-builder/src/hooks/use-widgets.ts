@@ -4,7 +4,7 @@ import { widgetsStore } from "@/store/widgets-store";
 
 export const defaultWidgetTemplate: Omit<Widget, "id"> = {
   name: "Untitled Widget",
-  description: "A widget to track flight information",
+  description: "",
   template: `<Card size="sm">
   <Title level="h3">{data.eta}</Title>
 
