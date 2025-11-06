@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { JSXEditor } from "monaco-jsx-editor";
 import { WidgetRenderer } from "@deer-flow/widget-renderer";
 import { JSONEditor } from "@/components/JSONEditor";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Download, Share } from "lucide-react";
+import { Download, PlusIcon, Share } from "lucide-react";
 import { definitions, components } from "@/components/widget-components";
 import { inferDataSchemaFromState, parseJSXTemplate, Widget } from "@deer-flow/widget";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { clone } from "@/lib/utils";
 
 const defaultWidget: Widget = {
   id: "widget-1",
@@ -37,20 +37,24 @@ const defaultWidget: Widget = {
   </Row>
 </Card>
     `,
-  states: {
-    default: {
-      eta: "1 min",
-      address: "1008 Mission St",
-      driver: {
-        name: "Jonathan",
-        photo: "https://cdn.openai.com/API/storybook/driver.png",
+  states: [
+    {
+      name: "Default",
+      data: {
+        eta: "1 min",
+        address: "1008 Mission St",
+        driver: {
+          name: "Jonathan",
+          photo: "https://cdn.openai.com/API/storybook/driver.png",
+        },
       },
     },
-  },
+  ],
 };
 
 export const WidgetBuilder = () => {
   const [widget, setWidget] = useState(defaultWidget);
+  const [activeState, setActiveState] = useState("0");
 
   useEffect(() => {
     const { success, schema } = parseJSXTemplate(widget.template || "");
@@ -64,7 +68,7 @@ export const WidgetBuilder = () => {
   }, [widget.template]);
 
   useEffect(() => {
-    const newSchema = inferDataSchemaFromState(widget.states || {});
+    const newSchema = inferDataSchemaFromState(widget.states || []);
     console.log("Inferred data schema:", newSchema);
     setWidget((prev) => ({
       ...prev,
@@ -79,19 +83,38 @@ export const WidgetBuilder = () => {
     }));
   };
 
-  const handleStateChange = (state: string) => {
+  const handleStateChange = (state: string, index: number) => {
     try {
-      const parsedState = JSON.parse(state);
+      const data = JSON.parse(state);
       setWidget((prev) => {
-        const newStates = { ...prev.states, default: parsedState };
+        const states = [...(prev.states || [])];
+        states[index] = {
+          ...states[index],
+          data,
+        };
         return {
           ...prev,
-          states: newStates,
+          states,
         };
       });
     } catch (error) {
       // Invalid JSON, ignore or show error
     }
+  };
+
+  const handleAddNewState = () => {
+    const states = [
+      ...(widget.states || []),
+      {
+        name: "New State",
+        data: clone(widget.states?.[0]?.data || {}),
+      },
+    ];
+    setActiveState(String(states.length - 1));
+    setWidget((prev) => ({
+      ...prev,
+      states,
+    }));
   };
 
   return (
@@ -133,25 +156,30 @@ export const WidgetBuilder = () => {
           </div>
           {/* Left Panel - Editor */}
           <div className="flex-1 border-t flex flex-col">
-            <Tabs defaultValue="default" className="flex-1 flex flex-col">
-              <div className="border-b px-4 py-2">
+            <Tabs value={activeState} className="flex-1 flex flex-col" onValueChange={setActiveState}>
+              <div className="border-b px-4 py-2 flex items-center">
+                <div className="font-medium mr-2">States:</div>
                 <TabsList>
-                  <TabsTrigger value="default">Default</TabsTrigger>
-                  <TabsTrigger value="new-state">New state +</TabsTrigger>
+                  {widget.states?.map((state, index) => (
+                    <TabsTrigger key={index.toString()} value={index.toString()}>
+                      {state.name || `New State`}
+                    </TabsTrigger>
+                  ))}
+                  <Button variant="outline" size="sm" className="ml-2" onClick={handleAddNewState}>
+                    <PlusIcon className="size-3" />
+                  </Button>
                 </TabsList>
               </div>
 
-              <TabsContent value="default" className="flex-1 m-0 p-4">
-                <JSONEditor
-                  value={JSON.stringify(widget.states?.default ?? {}, null, 2)}
-                  onChange={handleStateChange}
-                  className="h-full"
-                />
-              </TabsContent>
-
-              <TabsContent value="new-state" className="flex-1 m-0 p-4">
-                <div className="text-muted-foreground text-sm">Create a new state</div>
-              </TabsContent>
+              {widget.states?.map((state, index) => (
+                <TabsContent key={index.toString()} value={index.toString()} className="flex-1 m-0 p-4">
+                  <JSONEditor
+                    value={JSON.stringify(state.data ?? {}, null, 2)}
+                    onChange={(state) => handleStateChange(state, index)}
+                    className="h-full"
+                  />
+                </TabsContent>
+              ))}
             </Tabs>
           </div>
         </div>
@@ -164,7 +192,7 @@ export const WidgetBuilder = () => {
                 <WidgetRenderer
                   schema={widget.uiSchema}
                   components={components}
-                  data={widget.states?.["default"] ?? {}}
+                  data={widget.states?.[Number(activeState)]?.data ?? {}}
                 />
               </ErrorBoundary>
             </div>

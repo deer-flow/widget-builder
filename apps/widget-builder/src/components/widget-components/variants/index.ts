@@ -16,12 +16,12 @@ export * from "./flex";
  * with all variant maps merged. and format methods combined.
  *
  * @example
- * const Combined = combine({padding: Padding, margin: Margin});
+ * const Variants = variants({padding: Padding, margin: Margin});
  *
- * Combined.variant -> { padding: Padding.variant, margin: Margin.variant }
+ * Variants.variant -> { padding: Padding.variant, margin: Margin.variant }
  *
- * Combined.format({ padding: 'md', margin: 10 })
- * -> "p-4 m-[10px]"
+ * Variants.format({ padding: 'md', margin: 10 })
+ * -> ["p-md", {margin: "10px"}]
  */
 export function variants<T extends Record<string, Variant>>(
   variantMaps: T

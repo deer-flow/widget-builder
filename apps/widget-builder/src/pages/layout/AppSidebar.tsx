@@ -1,11 +1,4 @@
-import {
-  Box,
-  Grid3X3,
-  LayoutTemplate,
-  ChevronUp,
-  Plus,
-  Shapes,
-} from "lucide-react";
+import { Grid3X3, LayoutTemplate, Plus } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -70,10 +63,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    isActive={item.isActive}
-                    tooltip={item.title}
-                  >
+                  <SidebarMenuButton isActive={item.isActive} tooltip={item.title}>
                     <item.icon />
                     <span>{item.title}</span>
                   </SidebarMenuButton>

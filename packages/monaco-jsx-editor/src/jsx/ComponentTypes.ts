@@ -5,9 +5,7 @@ import { ComponentDefinition, ComponentProp } from "../types";
  */
 const generatePropType = (prop: ComponentProp): string => {
   const optional = prop.required ? "" : "?";
-  const description = prop.description
-    ? `\n    /** ${prop.description} */`
-    : "";
+  const description = prop.description ? `\n    /** ${prop.description} */` : "";
 
   // For union types with string literals, create a type alias for better Monaco support
   let propType = prop.type;
@@ -25,23 +23,15 @@ const generatePropType = (prop: ComponentProp): string => {
  */
 const generateComponentInterface = (component: ComponentDefinition): string => {
   // Filter out 'children' prop as it should be handled by JSX children, not as a required attribute
-  const filteredProps = component.props.filter(
-    (prop) => prop.name !== "children"
-  );
+  const filteredProps = component.props.filter((prop) => prop.name !== "children");
 
-  const propsDeclaration = filteredProps
-    .map((prop) => generatePropType(prop))
-    .join("\n");
+  const propsDeclaration = filteredProps.map((prop) => generatePropType(prop)).join("\n");
 
   // Add children separately as optional since it's handled by JSX
   const hasChildren = component.props.some((prop) => prop.name === "children");
-  const childrenDeclaration = hasChildren
-    ? `\n    /** JSX children content */\n    children?: React.ReactNode;`
-    : "";
+  const childrenDeclaration = hasChildren ? `\n    /** JSX children content */\n    children?: React.ReactNode;` : "";
 
-  const description = component.description
-    ? `\n  /** ${component.description} */`
-    : "";
+  const description = component.description ? `\n  /** ${component.description} */` : "";
 
   return `${description}
   interface ${component.name}Props {${propsDeclaration}${childrenDeclaration}
@@ -58,9 +48,7 @@ const generateIntrinsicElement = (component: ComponentDefinition): string => {
 /**
  * Generate type declarations for all components and register them in the JSX namespace
  */
-export const generateComponentTypes = (
-  components: ComponentDefinition[]
-): string => {
+export const generateComponentTypes = (components: ComponentDefinition[]): string => {
   if (!components || components.length === 0) {
     return `
 // No custom components defined
@@ -74,9 +62,7 @@ declare global {
 `;
   }
 
-  const componentInterfaces = components
-    .map(generateComponentInterface)
-    .join("\n\n");
+  const componentInterfaces = components.map(generateComponentInterface).join("\n\n");
   const intrinsicElements = components.map(generateIntrinsicElement).join("\n");
 
   return `
@@ -90,9 +76,7 @@ declare global {
   // Function component declarations with preserved prop types
   ${components
     .map((component) => {
-      const description = component.description
-        ? `\n  /** ${component.description} */`
-        : "";
+      const description = component.description ? `\n  /** ${component.description} */` : "";
       return `${description}
   function ${component.name}(props: ${component.name}Props): JSX.Element;`;
     })

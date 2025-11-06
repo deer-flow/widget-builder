@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Border, BorderColor, variants, VariantsProps } from "./variants";
+import { BorderColor, variants, VariantsProps } from "./variants";
 import { ComponentDefinition } from "monaco-jsx-editor";
 
 const Variants = variants({
@@ -25,26 +25,18 @@ export interface DividerProps
     VariantProps<typeof Base>,
     VariantsProps<typeof Variants> {}
 
-const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
-  ({ className, orientation, color, ...props }, ref) => {
-    const [variantClasses, variantStyles] = Variants.format({ color });
-    return (
-      <div
-        className={cn(className, Base({ orientation }), variantClasses)}
-        style={variantStyles}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
+const Divider = React.forwardRef<HTMLDivElement, DividerProps>(({ className, orientation, color, ...props }, ref) => {
+  const [variantClasses, variantStyles] = Variants.format({ color });
+  return (
+    <div className={cn(className, Base({ orientation }), variantClasses)} style={variantStyles} ref={ref} {...props} />
+  );
+});
 
 Divider.displayName = "Divider";
 
 const DividerDefinition: ComponentDefinition = {
   name: "Divider",
-  description:
-    "A divider component to separate content with customizable styling.",
+  description: "A divider component to separate content with customizable styling.",
   props: [
     {
       name: "orientation",

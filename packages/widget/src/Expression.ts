@@ -1,10 +1,10 @@
 /**
- * 创建一个简单的沙盒环境来执行表达式
+ * Create a simple sandbox environment to execute expressions
  */
 function createSandbox(data: Record<string, any>) {
-  // 创建安全的全局对象
+  // Create a safe globals object
   const safeGlobals = {
-    // 基本的 JavaScript 构造函数和方法
+    // Basic JavaScript constructors and objects
     String,
     Number,
     Boolean,
@@ -13,12 +13,12 @@ function createSandbox(data: Record<string, any>) {
     Math,
     Date,
     JSON,
-    // 常用的工具方法
+    // Common utility functions
     parseInt,
     parseFloat,
     isNaN,
     isFinite,
-    // 数据对象
+    // Data object
     data,
   };
 
@@ -26,22 +26,19 @@ function createSandbox(data: Record<string, any>) {
 }
 
 /**
- * 使用沙盒执行表达式
+ * Execute expression within sandbox
  */
-export function executeExpression(
-  expression: string,
-  data: Record<string, any>
-): any {
+export function executeExpression(expression: string, data: Record<string, any>): any {
   try {
-    // 创建沙盒环境
+    // Create sandbox environment
     const sandbox = createSandbox(data);
 
-    // 创建参数名称和值的数组
+    // Create arrays of parameter names and values
     const paramNames = Object.keys(sandbox);
     const paramValues = Object.values(sandbox);
 
-    // 使用改进的沙盒：创建一个函数，传入所有允许的变量
-    // 在浏览器环境中阻止访问危险的全局变量
+    // Use improved sandbox: create a function with all allowed variables passed in
+    // Prevent access to dangerous globals in browser environment
     const func = new Function(
       ...paramNames,
       `
@@ -55,7 +52,7 @@ export function executeExpression(
       `
     );
 
-    // 执行函数
+    // Execute the function
     const result = func(...paramValues);
 
     return result;

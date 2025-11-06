@@ -25,7 +25,7 @@ import { WidgetState } from "./Widget";
  *   default: { name: 'Default', age: 0 }
  * };
  *
- * const schema = inferDataSchemaFromState(states, 'default');
+ * const schema = inferDataSchemaFromState(states;
  * // Returns:
  * // {
  * //   type: 'object',
@@ -37,32 +37,22 @@ import { WidgetState } from "./Widget";
  * // }
  * ```
  */
-export function inferDataSchemaFromState(
-  states: Record<string, WidgetState>,
-  defaultKey: string = "default"
-): JSONSchema4 {
-  const allStates = Object.values(states);
-
-  if (allStates.length === 0) {
+export function inferDataSchemaFromState(states: WidgetState[]): JSONSchema4 {
+  if (states.length === 0) {
     return { type: "object", properties: {} };
   }
-
-  const schema = inferObjectsSchema(allStates, states[defaultKey]);
+  const objects = states.map((state) => state.data);
+  const schema = inferObjectsSchema(objects, states[0].data);
   return schema;
 }
 
-function inferObjectsSchema(
-  states: WidgetState[],
-  defaults?: WidgetState
-): JSONSchema4 {
+function inferObjectsSchema(states: object[], defaults?: object): JSONSchema4 {
   const properties: JSONSchema4["properties"] = {};
   const required: string[] = [];
   const schema: JSONSchema4 = { type: "object", properties, required };
 
   // Filter out non-object states
-  const validStates = states.filter(
-    (state) => typeof state === "object" && state !== null
-  );
+  const validStates = states.filter((state) => typeof state === "object" && state !== null);
 
   if (validStates.length === 0) {
     return schema;
@@ -75,9 +65,7 @@ function inferObjectsSchema(
 
   keys.forEach((key) => {
     const values = validStates.map((state) => (state as any)[key]);
-    const allHaveKey = validStates.every((state) =>
-      (state as any).hasOwnProperty(key)
-    );
+    const allHaveKey = validStates.every((state) => (state as any).hasOwnProperty(key));
     if (allHaveKey) {
       required.push(key);
     }
@@ -108,11 +96,7 @@ function inferObjectsSchema(
       }
     });
 
-    if (
-      objectValues.length === 0 &&
-      arrayValues.length === 0 &&
-      types.size > 0
-    ) {
+    if (objectValues.length === 0 && arrayValues.length === 0 && types.size > 0) {
       const propertySchema: JSONSchema4 = { type: Array.from(types) };
       if (defaults && (defaults as any).hasOwnProperty(key)) {
         propertySchema.default = (defaults as any)[key];
@@ -120,10 +104,7 @@ function inferObjectsSchema(
       properties[key] = propertySchema;
     } else if (objectValues.length > 0) {
       // Complex type - object
-      const objectSchema = inferObjectsSchema(
-        objectValues,
-        (defaults as any)?.[key]
-      );
+      const objectSchema = inferObjectsSchema(objectValues, (defaults as any)?.[key]);
       properties[key] =
         types.size > 1
           ? {

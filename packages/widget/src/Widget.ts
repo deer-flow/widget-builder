@@ -22,7 +22,10 @@ export interface Widget {
   dataSchema?: JSONSchema4;
 
   /** Predefined states for the widget */
-  states?: Record<string, WidgetState>;
+  states?: WidgetState[];
 }
 
-export type WidgetState = object;
+export type WidgetState = {
+  name: string;
+  data: object;
+};

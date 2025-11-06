@@ -25,7 +25,7 @@ export class JSXLanguage {
   private monaco: typeof Monaco | null = null;
 
   constructor(readonly options: JSXLanguageOptions) {
-    // 生成组件类型声明
+    // Generate component type declarations
     this.componentTypesLib = generateComponentTypes(options.components || []);
     this._dataSchema = options.dataSchema ?? null;
   }
@@ -40,12 +40,12 @@ export class JSXLanguage {
       return;
     }
 
-    // 设置TypeScript编译选项
+    // Set TypeScript compiler options
     this.setupTypeScriptOptions(monaco);
 
     this.setupJsxHighlighting(editor, monaco);
 
-    // 添加类型声明库
+    // Add type declaration libraries
     this.addTypeDefinitions(monaco);
 
     // Store disposable for cleanup
@@ -137,15 +137,15 @@ export class JSXLanguage {
     const tsDefaults = monaco.languages.typescript.typescriptDefaults;
     const jsDefaults = monaco.languages.typescript.javascriptDefaults;
 
-    // 添加 React 类型定义
+    // Add React type definitions
     tsDefaults.addExtraLib(ReactTypes, "file:///node_modules/@types/react/jsx-runtime.d.ts");
     jsDefaults.addExtraLib(ReactTypes, "file:///node_modules/@types/react/jsx-runtime.d.ts");
 
-    // 添加组件类型定义
+    // Add component type definitions
     tsDefaults.addExtraLib(this.componentTypesLib, "file:///widget-components.d.ts");
     jsDefaults.addExtraLib(this.componentTypesLib, "file:///widget-components.d.ts");
 
-    // 添加 data 类型定义（如果存在）
+    // Add data type definitions (if present)
     if (this._dataSchema) {
       const dataTypesContent = generateDataTypes(this._dataSchema);
       this.dataTypesDisposable = tsDefaults.addExtraLib(dataTypesContent, "file:///data-types.d.ts");
