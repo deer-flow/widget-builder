@@ -30,24 +30,21 @@ export const MinHeightVariant = {
 };
 
 export interface SizingProps {
-  width?: keyof typeof WidthVariant | number | string;
-  height?: keyof typeof HeightVariant | number | string;
-  minWidth?: keyof typeof MinWidthVariant | number | string;
-  minHeight?: keyof typeof MinHeightVariant | number | string;
+  width?: keyof typeof WidthVariant | number | `${number}%`;
+  height?: keyof typeof HeightVariant | number | `${number}%`;
+  minWidth?: keyof typeof MinWidthVariant | number | `${number}%`;
+  minHeight?: keyof typeof MinHeightVariant | number | `${number}%`;
 }
 
 export const Width = {
   variant: WidthVariant,
   definition: {
     name: "width",
-    type: '"sm" | "md" | "lg" | "xl" | "xs" | "auto" | "full" | number | string',
+    type: '"sm" | "md" | "lg" | "xl" | "xs" | "auto" | "full" | number | `${number}%`',
     required: false,
-    description:
-      "Width; accepts a width token, a custom px number value, or a percentage string.",
+    description: "Width; accepts a width token, a custom px number value, or a percentage string.",
   },
-  format: (
-    width: SizingProps["width"]
-  ): string | [string, React.CSSProperties] => {
+  format: (width: SizingProps["width"]): string | [string, React.CSSProperties] => {
     if (width === undefined) return "";
 
     if (typeof width === "number") {
@@ -74,14 +71,11 @@ export const MinWidth = {
   variant: MinWidthVariant,
   definition: {
     name: "minWidth",
-    type: '"auto" | "full" | "xs" | "sm" | "md" | "lg" | "xl" | number | string',
+    type: '"auto" | "full" | "xs" | "sm" | "md" | "lg" | "xl" | number | `${number}%`',
     required: false,
-    description:
-      "Minimum Width; accepts a min-width token, a custom px number value, or a percentage string.",
+    description: "Minimum Width; accepts a min-width token, a custom px number value, or a percentage string.",
   },
-  format: (
-    minWidth: SizingProps["minWidth"]
-  ): string | [string, React.CSSProperties] => {
+  format: (minWidth: SizingProps["minWidth"]): string | [string, React.CSSProperties] => {
     if (minWidth === undefined) return "";
 
     const styles: React.CSSProperties = {};
@@ -96,9 +90,7 @@ export const MinWidth = {
       if (minWidth.endsWith("%")) {
         styles.minWidth = minWidth;
       } else if (MinWidth.variant.hasOwnProperty(minWidth)) {
-        classnames.push(
-          `min-w-${MinWidth.variant[minWidth as keyof typeof MinWidth.variant]}`
-        );
+        classnames.push(`min-w-${MinWidth.variant[minWidth as keyof typeof MinWidth.variant]}`);
       }
     }
 
@@ -110,14 +102,11 @@ export const Height = {
   variant: HeightVariant,
   definition: {
     name: "height",
-    type: '"xs" | "sm" | "md" | "lg" | "xl" | "auto" | "full" | number | string',
+    type: '"xs" | "sm" | "md" | "lg" | "xl" | "auto" | "full" | number | `${number}%`',
     required: false,
-    description:
-      "Height; accepts a height token, a custom px number value, or a percentage string.",
+    description: "Height; accepts a height token, a custom px number value, or a percentage string.",
   },
-  format: (
-    height: SizingProps["height"]
-  ): string | [string, React.CSSProperties] => {
+  format: (height: SizingProps["height"]): string | [string, React.CSSProperties] => {
     if (height === undefined) return "";
 
     if (typeof height === "number") {
@@ -144,14 +133,11 @@ export const MinHeight = {
   variant: MinHeightVariant,
   definition: {
     name: "minHeight",
-    type: '"auto" | "full" | "xs" | "sm" | "md" | "lg" | "xl" | number | string',
+    type: '"auto" | "full" | "xs" | "sm" | "md" | "lg" | "xl" | number | `${number}%`',
     required: false,
-    description:
-      "Minimum Height; accepts a min-height token, a custom px number value, or a percentage string.",
+    description: "Minimum Height; accepts a min-height token, a custom px number value, or a percentage string.",
   },
-  format: (
-    minHeight: SizingProps["minHeight"]
-  ): string | [string, React.CSSProperties] => {
+  format: (minHeight: SizingProps["minHeight"]): string | [string, React.CSSProperties] => {
     if (minHeight === undefined) return "";
 
     if (typeof minHeight === "number") {
@@ -166,10 +152,7 @@ export const MinHeight = {
 
       // Fallback to predefined variant for compatibility
       if (MinHeight.variant.hasOwnProperty(minHeight)) {
-        return [
-          `min-h-${MinHeight.variant[minHeight as keyof typeof MinHeight.variant]}`,
-          {},
-        ];
+        return [`min-h-${MinHeight.variant[minHeight as keyof typeof MinHeight.variant]}`, {}];
       }
     }
 
@@ -185,13 +168,11 @@ export const Size = {
   variant: SizeVariant,
   definition: {
     name: "size",
-    type: '"xs" | "sm" | "md" | "lg" | "xl" | "full" | number | string',
+    type: '"xs" | "sm" | "md" | "lg" | "xl" | "full" | number | `${number}%`',
     required: false,
     description: "Size; sets both width and height.",
   },
-  format: (
-    size: keyof typeof SizingVariant | number | string
-  ): string | [string, React.CSSProperties] => {
+  format: (size: keyof typeof SizingVariant | number | `${number}%`): string | [string, React.CSSProperties] => {
     if (typeof size === "number") {
       return ["", { width: `${size}px`, height: `${size}px` }];
     }

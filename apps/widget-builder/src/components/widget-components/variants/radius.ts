@@ -15,21 +15,18 @@ export const RadiusVariant = {
 } as const;
 
 export interface RadiusProps {
-  radius?: keyof typeof RadiusVariant | number | string;
+  radius?: keyof typeof RadiusVariant | number | `${number}%`;
 }
 
 export const Radius = {
   variant: RadiusVariant,
   definition: {
     name: "radius",
-    type: '"none" | "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "full" | number | string',
+    type: '"none" | "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "full" | number | `${number}%`',
     required: false,
-    description:
-      "Border radius; accepts a radius token, a custom px number value, or a percentage string.",
+    description: "Border radius; accepts a radius token, a custom px number value, or a percentage string.",
   },
-  format: (
-    radius: RadiusProps["radius"]
-  ): string | [string, React.CSSProperties] => {
+  format: (radius: RadiusProps["radius"]): string | [string, React.CSSProperties] => {
     if (radius === undefined) return "";
 
     if (typeof radius === "number") {
