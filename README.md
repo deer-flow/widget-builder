@@ -39,6 +39,46 @@ The widget components support preset Tailwind CSS style variants for quick styli
   pnpm --filter @widget-builder/app dev
   ```
 
+### Create your own widget-builder
+
+To create your own widget-builder application, you can use the following code snippets as a reference.
+
+**JSXEditor**
+
+```tsx
+import { JSXEditor, ComponentDefinition } from "monaco-jsx-editor";
+import { inferDataSchemaFromState, parseJSXTemplate } from "@deer-flow/widget";
+
+const definitions: ComponentDefinition[] = [...]; // Define your widget components here
+const dataSchema = {...}; // Dynamically infer data schema from states with `inferDataSchemaFromState`
+
+const handleTemplateChange = (newTemplate: string) => {
+  // Parse the jsx code to schema with `parseJSXTemplate`
+};
+
+<JSXEditor
+  value={widget.template}
+  onChange={handleTemplateChange}
+  components={definitions}
+  dataSchema={dataSchema}
+/>;
+```
+
+**Widget Renderer**
+
+```tsx
+import { WidgetRenderer } from "@deer-flow/widget-renderer";
+import { components } from "./path-to-your-widget-components";
+
+const components = {
+  Button: CustomButton,
+  Card: CustomCard,
+  // ...other true components
+};
+
+<WidgetRenderer schema={widget.uiSchema} components={components} state={widgetState} />;
+```
+
 ## License
 
 MIT License.
