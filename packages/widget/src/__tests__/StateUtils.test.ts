@@ -5,7 +5,7 @@ import { WidgetState } from "../Widget";
 
 describe("inferDataSchemaFromState", () => {
   it("should return empty object schema when no states provided", () => {
-    const result = inferDataSchemaFromState({});
+    const result = inferDataSchemaFromState([{ name: "default", data: {} }]);
 
     expect(result).toEqual({
       type: "object",
@@ -14,13 +14,13 @@ describe("inferDataSchemaFromState", () => {
   });
 
   it("should infer schema from simple primitive types", () => {
-    const states = {
-      state1: { name: "John", age: 30, active: true },
-      state2: { name: "Jane", age: 25, active: false },
-      default: { name: "Default", age: 0, active: true },
-    };
+    const states: WidgetState[] = [
+      { name: "default", data: { name: "Default", age: 0, active: true } },
+      { name: "state1", data: { name: "John", age: 30, active: true } },
+      { name: "state2", data: { name: "Jane", age: 25, active: false } },
+    ];
 
-    const result = inferDataSchemaFromState(states, "default");
+    const result = inferDataSchemaFromState(states);
 
     expect(result).toEqual({
       type: "object",
@@ -34,13 +34,13 @@ describe("inferDataSchemaFromState", () => {
   });
 
   it("should handle union types with primitive arrays", () => {
-    const states = {
-      state1: { value: "text" },
-      state2: { value: 42 },
-      default: { value: "default" },
-    };
+    const states = [
+      { name: "default", data: { value: "default" } },
+      { name: "state1", data: { value: "text" } },
+      { name: "state2", data: { value: 42 } },
+    ];
 
-    const result = inferDataSchemaFromState(states, "default");
+    const result = inferDataSchemaFromState(states);
 
     expect(result).toEqual({
       type: "object",
@@ -52,19 +52,13 @@ describe("inferDataSchemaFromState", () => {
   });
 
   it("should handle nested objects", () => {
-    const states = {
-      state1: {
-        user: { name: "John", details: { age: 30 } },
-      },
-      state2: {
-        user: { name: "Jane", details: { age: 25 } },
-      },
-      default: {
-        user: { name: "Default", details: { age: 0 } },
-      },
-    };
+    const states = [
+      { name: "default", data: { user: { name: "Default", details: { age: 0 } } } },
+      { name: "state1", data: { user: { name: "John", details: { age: 30 } } } },
+      { name: "state2", data: { user: { name: "Jane", details: { age: 25 } } } },
+    ];
 
-    const result = inferDataSchemaFromState(states, "default");
+    const result = inferDataSchemaFromState(states);
 
     expect(result).toEqual({
       type: "object",
@@ -89,13 +83,13 @@ describe("inferDataSchemaFromState", () => {
   });
 
   it("should handle arrays", () => {
-    const states = {
-      state1: { items: [1, 2, 3] },
-      state2: { items: ["a", "b", "c"] },
-      default: { items: [] },
-    };
+    const states = [
+      { name: "default", data: { items: [] } },
+      { name: "state1", data: { items: [1, 2, 3] } },
+      { name: "state2", data: { items: ["a", "b", "c"] } },
+    ];
 
-    const result = inferDataSchemaFromState(states, "default");
+    const result = inferDataSchemaFromState(states);
 
     expect(result).toEqual({
       type: "object",
@@ -107,13 +101,13 @@ describe("inferDataSchemaFromState", () => {
   });
 
   it("should handle complex union types with anyOf", () => {
-    const states = {
-      state1: { data: { nested: "object" } },
-      state2: { data: "simple string" },
-      default: { data: { nested: "default" } },
-    };
+    const states: WidgetState[] = [
+      { name: "default", data: { data: { nested: "default" } } },
+      { name: "state1", data: { data: { nested: "object" } } },
+      { name: "state2", data: { data: "simple string" } },
+    ];
 
-    const result = inferDataSchemaFromState(states, "default");
+    const result = inferDataSchemaFromState(states);
 
     expect(result).toEqual({
       type: "object",
@@ -136,13 +130,13 @@ describe("inferDataSchemaFromState", () => {
   });
 
   it("should mark properties as optional if not present in all states", () => {
-    const states = {
-      state1: { name: "John", age: 30 },
-      state2: { name: "Jane" }, // missing age
-      default: { name: "Default", age: 0 },
-    };
+    const states = [
+      { name: "default", data: { name: "Default", age: 0 } },
+      { name: "state1", data: { name: "John", age: 30 } },
+      { name: "state2", data: { name: "Jane" } }, // missing age
+    ];
 
-    const result = inferDataSchemaFromState(states, "default");
+    const result = inferDataSchemaFromState(states);
 
     expect(result).toEqual({
       type: "object",
@@ -155,13 +149,13 @@ describe("inferDataSchemaFromState", () => {
   });
 
   it("should handle null values", () => {
-    const states = {
-      state1: { value: null },
-      state2: { value: "text" },
-      default: { value: null },
-    };
+    const states = [
+      { name: "default", data: { value: null } },
+      { name: "state1", data: { value: null } },
+      { name: "state2", data: { value: "text" } },
+    ];
 
-    const result = inferDataSchemaFromState(states, "default");
+    const result = inferDataSchemaFromState(states);
 
     expect(result).toEqual({
       type: "object",
@@ -173,81 +167,73 @@ describe("inferDataSchemaFromState", () => {
   });
 
   it("should throw error for unsupported types", () => {
-    const states = {
-      state1: { func: () => {} },
-      default: { func: () => {} },
-    };
+    const states = [
+      { name: "default", data: { func: () => {} } },
+      { name: "state1", data: { func: () => {} } },
+    ];
 
     expect(() => {
-      inferDataSchemaFromState(states, "default");
+      inferDataSchemaFromState(states);
     }).toThrow('Unsupported type for key "func"');
   });
 
   it("should throw error for Map instances", () => {
-    const states = {
-      state1: { mapValue: new Map() },
-      default: { mapValue: new Map() },
-    };
+    const states = [
+      { name: "default", data: { mapValue: new Map() } },
+      { name: "state1", data: { mapValue: new Map() } },
+    ];
 
     expect(() => {
-      inferDataSchemaFromState(states, "default");
+      inferDataSchemaFromState(states);
     }).toThrow('Unsupported type for key "mapValue"');
   });
 
   it("should throw error for Set instances", () => {
-    const states = {
-      state1: { setValue: new Set() },
-      default: { setValue: new Set() },
-    };
+    const states = [
+      { name: "default", data: { setValue: new Set() } },
+      { name: "state1", data: { setValue: new Set() } },
+    ];
 
     expect(() => {
-      inferDataSchemaFromState(states, "default");
+      inferDataSchemaFromState(states);
     }).toThrow('Unsupported type for key "setValue"');
   });
 
   it("should throw error for RegExp instances", () => {
-    const states = {
-      state1: { regexValue: /test/ },
-      default: { regexValue: /test/ },
-    };
+    const states = [
+      { name: "default", data: { regexValue: /test/ } },
+      { name: "state1", data: { regexValue: /test/ } },
+    ];
 
     expect(() => {
-      inferDataSchemaFromState(states, "default");
+      inferDataSchemaFromState(states);
     }).toThrow('Unsupported type for key "regexValue"');
   });
 
   it("should throw error for Symbol values", () => {
-    const states = {
-      state1: { symbolValue: Symbol("test") },
-      default: { symbolValue: Symbol("test") },
-    };
+    const states = [
+      { name: "default", data: { symbolValue: Symbol("test") } },
+      { name: "state1", data: { symbolValue: Symbol("test") } },
+    ];
 
     expect(() => {
-      inferDataSchemaFromState(states, "default");
+      inferDataSchemaFromState(states);
     }).toThrow('Unsupported type for key "symbolValue"');
   });
 
-  it("should use default key for default values", () => {
-    const states = {
-      production: { name: "Prod", count: 100 },
-      development: { name: "Dev", count: 1 },
-      staging: { name: "Stage", count: 10 },
-    };
+  it("should throw error for Symbol values", () => {
+    const states = [
+      { name: "default", data: { symbolValue: Symbol("test") } },
+      { name: "state1", data: { symbolValue: Symbol("test") } },
+    ];
 
-    const result = inferDataSchemaFromState(states, "staging");
-
-    expect(result).toEqual({
-      type: "object",
-      properties: {
-        name: { type: ["string"], default: "Stage" },
-        count: { type: ["number"], default: 10 },
-      },
-      required: ["name", "count"],
-    });
+    expect(() => {
+      inferDataSchemaFromState(states);
+    }).toThrow('Unsupported type for key "symbolValue"');
   });
 
   it("should handle complex nested structures with mixed types", () => {
-    const states = {
+    const data = {
       state1: {
         config: {
           settings: { theme: "dark", notifications: true },
@@ -271,7 +257,13 @@ describe("inferDataSchemaFromState", () => {
       },
     };
 
-    const result = inferDataSchemaFromState(states, "default");
+    const states = [
+      { name: "state1", data: data["state1"] },
+      { name: "state2", data: data["state2"] },
+      { name: "default", data: data["default"] },
+    ];
+
+    const result = inferDataSchemaFromState(states);
 
     expect(result).toEqual({
       type: "object",
@@ -305,12 +297,12 @@ describe("inferDataSchemaFromState", () => {
   });
 
   it("should skip non-object states gracefully", () => {
-    const states = {
-      state1: { name: "John" },
-      default: { name: "Default" },
-    };
+    const states = [
+      { name: "state1", data: { name: "John" } },
+      { name: "default", data: { name: "Default" } },
+    ];
 
-    const result = inferDataSchemaFromState(states, "default");
+    const result = inferDataSchemaFromState(states);
 
     expect(result).toEqual({
       type: "object",
