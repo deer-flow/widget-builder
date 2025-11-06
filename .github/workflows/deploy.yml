@@ -45,6 +45,13 @@ jobs:
       - name: Build packages
         run: pnpm run build
 
+      - name: Add SPA 404 fallback
+        shell: bash
+        run: |
+          if [ -d "./apps/widget-builder/dist" ]; then
+            cp ./apps/widget-builder/dist/index.html ./apps/widget-builder/dist/404.html || true
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
