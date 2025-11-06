@@ -12,7 +12,8 @@
     "format:check": "prettier --config ./config/eslint-config/prettier.config.mjs --check .",
     "type-check": "turbo run type-check",
     "test": "turbo run test",
-    "test:run": "turbo run test:run"
+    "test:run": "turbo run test:run",
+    "deploy": "turbo run build && cd apps/widget-builder && pnpm run deploy"
   },
   "devDependencies": {
     "eslint": "~9.39.1",
