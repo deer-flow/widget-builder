@@ -1,14 +1,15 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 import { JSXEditor } from "monaco-jsx-editor";
 import { WidgetRenderer } from "@deer-flow/widget-renderer";
 import { JSONEditor } from "@/components/JSONEditor";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Download, PlusIcon, Share } from "lucide-react";
+import { Download, PlusIcon } from "lucide-react";
 import { definitions, components } from "@/components/widget-components";
 import { inferDataSchemaFromState, parseJSXTemplate, Widget } from "@deer-flow/widget";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { clone } from "@/lib/utils";
+import { download } from "@/lib/download";
 
 const defaultWidget: Widget = {
   id: "widget-1",
@@ -117,17 +118,20 @@ export const WidgetBuilder = () => {
     }));
   };
 
+  const handleDownload = () => {
+    const content = JSON.stringify(widget, null, 2);
+    const filename = `${widget.name?.toLowerCase().replace(/\s+/g, "-") || "widget"}.json`;
+
+    download(content, filename, "application/json");
+  };
+
   return (
     <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <div className="h-14 border-b flex items-center justify-between px-4">
         <h1 className="text-lg font-semibold">{widget.name ?? "Untitled Widget"}</h1>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Share className="h-4 w-4 mr-2" />
-            Share
-          </Button>
-          <Button variant="default" size="sm">
+          <Button variant="default" size="sm" onClick={handleDownload}>
             <Download className="h-4 w-4 mr-2" />
             Download
           </Button>
