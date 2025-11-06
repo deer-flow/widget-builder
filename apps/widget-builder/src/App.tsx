@@ -6,7 +6,7 @@ import { WidgetGallery } from "@/pages/gallery";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.MODE === "production" ? "/widget-builder" : ""}>
       <SidebarProvider defaultOpen>
         <AppSidebar />
         <SidebarInset>
