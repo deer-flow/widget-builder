@@ -1,24 +1,36 @@
-import js from "@eslint/js";
+// import js from "@eslint/js";
 import json from "@eslint/json";
 import importX from "eslint-plugin-import-x";
-import globals from "globals";
-import tseslint from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
+import tseslint from "typescript-eslint";
 
 export const web = [
-  {
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    ...js.configs.recommended,
-    languageOptions: {
-      globals: globals.browser,
-    },
-  },
+  ...tseslint.configs.recommended,
   {
     files: ["**/*.json", "**/*.jsonc", "**/*.json5"],
     ...json.configs.recommended,
   },
-  ...tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
+  {
+    files: ["**/*.{jsx,tsx}"],
+    ...pluginReact.configs.flat.recommended,
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+    rules: {
+      ...pluginReact.configs.flat.recommended.rules,
+      "react/react-in-jsx-scope": "off", // React 17+ 不需要导入React
+      "react/jsx-uses-react": "off", // React 17+ 不需要导入React
+    },
+  },
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     plugins: {

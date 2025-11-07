@@ -1,5 +1,7 @@
 import React from "react";
+
 import { cn } from "@/lib/utils";
+
 import { variants, FontSize, FontWeight, TextAlign, TextColor, Truncate, VariantsProps } from "./variants";
 
 const Variants = variants({

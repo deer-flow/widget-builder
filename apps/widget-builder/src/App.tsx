@@ -1,9 +1,10 @@
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/pages/layout";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { WidgetBuilder } from "@/pages/builder";
-import { WidgetGallery } from "@/pages/gallery";
 import { WidgetComponents } from "@/pages/components";
+import { WidgetGallery } from "@/pages/gallery";
+import { AppSidebar } from "@/pages/layout";
 
 function App() {
   return (

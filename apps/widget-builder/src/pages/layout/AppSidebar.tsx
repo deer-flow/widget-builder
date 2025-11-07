@@ -1,4 +1,6 @@
 import { LayoutTemplate, PlusCircleIcon, Package } from "lucide-react";
+import { Link } from "react-router-dom";
+
 import {
   Sidebar,
   SidebarContent,
@@ -9,8 +11,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+
 import { MyWidgets } from "./MyWidgets";
-import { Link } from "react-router-dom";
 
 export function AppSidebar() {
   return (

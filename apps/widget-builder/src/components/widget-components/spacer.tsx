@@ -1,7 +1,9 @@
-import React from "react";
-import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ComponentDefinition } from "monaco-jsx-editor";
+import React from "react";
+
+import { cn } from "@/lib/utils";
+
 import { Height, MinHeight, MinWidth, variants, VariantsProps, Width } from "./variants";
 
 const Base = cva("flex-1", {

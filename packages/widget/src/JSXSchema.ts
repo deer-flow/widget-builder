@@ -4,7 +4,7 @@ import * as t from "@babel/types";
 export interface JSXElementSchema {
   type: "element" | "text" | "expression";
   name?: string; // Component name
-  props?: Record<string, any>; // Component props
+  props?: Record<string, unknown>; // Component props
   children?: JSXElementSchema[]; // Child elements
   value?: string | number | boolean | { __expression: string }; // For text/expression nodes
   position?: {
@@ -62,9 +62,7 @@ class BabelJSXParser {
     } catch (error) {
       return {
         success: false,
-        errors: [
-          error instanceof Error ? error.message : "Unknown parsing error",
-        ],
+        errors: [error instanceof Error ? error.message : "Unknown parsing error"],
       };
     }
   }
@@ -72,7 +70,7 @@ class BabelJSXParser {
   private findJSXElement(ast: t.File): t.JSXElement | t.JSXFragment | null {
     let jsxElement: t.JSXElement | t.JSXFragment | null = null;
 
-    const visitor = (node: any) => {
+    const visitor = (node: t.Node) => {
       if (t.isJSXElement(node) || t.isJSXFragment(node)) {
         if (!jsxElement) {
           jsxElement = node;
@@ -82,11 +80,15 @@ class BabelJSXParser {
 
       // Recursively visit child nodes
       for (const key of Object.keys(node)) {
-        const child = node[key];
+        const child = node[key as keyof typeof node];
         if (child && typeof child === "object") {
           if (Array.isArray(child)) {
-            child.forEach(visitor);
-          } else if (child.type) {
+            child.forEach((c) => {
+              if (t.isNode(c)) {
+                visitor(c);
+              }
+            });
+          } else if (t.isNode(child)) {
             visitor(child);
           }
         }
@@ -98,12 +100,7 @@ class BabelJSXParser {
   }
 
   private convertToSchema(
-    node:
-      | t.JSXElement
-      | t.JSXFragment
-      | t.JSXText
-      | t.JSXExpressionContainer
-      | any
+    node: t.JSXFragment | t.JSXText | t.JSXExpressionContainer | t.JSXSpreadChild | t.JSXElement
   ): JSXElementSchema {
     if (t.isJSXElement(node)) {
       return this.convertJSXElement(node);
@@ -163,15 +160,10 @@ class BabelJSXParser {
     };
   }
 
-  private convertJSXExpression(
-    expression: t.JSXExpressionContainer
-  ): JSXElementSchema {
+  private convertJSXExpression(expression: t.JSXExpressionContainer): JSXElementSchema {
     let expressionCode = "";
 
-    if (
-      expression.expression &&
-      !t.isJSXEmptyExpression(expression.expression)
-    ) {
+    if (expression.expression && !t.isJSXEmptyExpression(expression.expression)) {
       // Extract the expression code from the original input
       const start = expression.expression.start || 0;
       const end = expression.expression.end || 0;
@@ -185,9 +177,7 @@ class BabelJSXParser {
     };
   }
 
-  private getElementName(
-    name: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName
-  ): string {
+  private getElementName(name: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName): string {
     if (t.isJSXIdentifier(name)) {
       return name.name;
     } else if (t.isJSXMemberExpression(name)) {
@@ -198,10 +188,8 @@ class BabelJSXParser {
     return "Unknown";
   }
 
-  private convertProps(
-    attributes: Array<t.JSXAttribute | t.JSXSpreadAttribute>
-  ): Record<string, any> {
-    const props: Record<string, any> = {};
+  private convertProps(attributes: Array<t.JSXAttribute | t.JSXSpreadAttribute>): Record<string, unknown> {
+    const props: Record<string, unknown> = {};
 
     for (const attr of attributes) {
       if (t.isJSXAttribute(attr)) {
@@ -213,10 +201,7 @@ class BabelJSXParser {
         } else if (t.isStringLiteral(attr.value)) {
           props[name] = attr.value.value;
         } else if (t.isJSXExpressionContainer(attr.value)) {
-          if (
-            attr.value.expression &&
-            !t.isJSXEmptyExpression(attr.value.expression)
-          ) {
+          if (attr.value.expression && !t.isJSXEmptyExpression(attr.value.expression)) {
             const start = attr.value.expression.start || 0;
             const end = attr.value.expression.end || 0;
             const expressionCode = this.input.slice(start, end);
@@ -237,7 +222,7 @@ class BabelJSXParser {
     return props;
   }
 
-  private getNodePosition(node: any): {
+  private getNodePosition(node: t.Node): {
     start: number;
     end: number;
     line: number;
@@ -263,10 +248,7 @@ export function parseJSXTemplate(template: string): ParseResult {
 /**
  * Convert JSX schema back to JSX string (for debugging/visualization)
  */
-export function schemaToJSX(
-  schema: JSXElementSchema,
-  indent: number = 0
-): string {
+export function schemaToJSX(schema: JSXElementSchema, indent: number = 0): string {
   const spacing = "  ".repeat(indent);
 
   if (schema.type === "text") {
@@ -314,12 +296,9 @@ export function schemaToJSX(
       return `<${name}${propsWithSpace} />`;
     }
 
-    const childrenStr = children
-      .map((child) => schemaToJSX(child, indent + 1))
-      .join("");
+    const childrenStr = children.map((child) => schemaToJSX(child, indent + 1)).join("");
 
-    const hasTextOnlyChild =
-      children.length === 1 && children[0].type === "text";
+    const hasTextOnlyChild = children.length === 1 && children[0].type === "text";
 
     if (hasTextOnlyChild) {
       return `<${name}${propsWithSpace}>${childrenStr}</${name}>`;

@@ -1,7 +1,7 @@
 /**
  * Create a simple sandbox environment to execute expressions
  */
-function createSandbox(data: Record<string, any>) {
+function createSandbox(data: Record<string, unknown>) {
   // Create a safe globals object
   const safeGlobals = {
     // Basic JavaScript constructors and objects
@@ -28,7 +28,7 @@ function createSandbox(data: Record<string, any>) {
 /**
  * Execute expression within sandbox
  */
-export function executeExpression(expression: string, data: Record<string, any>): any {
+export function executeExpression(expression: string, data: Record<string, unknown>): unknown {
   try {
     // Create sandbox environment
     const sandbox = createSandbox(data);

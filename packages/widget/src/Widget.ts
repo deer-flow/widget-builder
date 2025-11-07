@@ -27,5 +27,5 @@ export interface Widget {
 
 export type WidgetState = {
   name: string;
-  data: object;
+  data: Record<string, unknown>;
 };

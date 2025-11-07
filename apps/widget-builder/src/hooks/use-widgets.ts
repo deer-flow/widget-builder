@@ -1,5 +1,6 @@
-import { useSyncExternalStore, useCallback } from "react";
 import { Widget } from "@deer-flow/widget";
+import { useSyncExternalStore, useCallback } from "react";
+
 import { widgetsStore } from "@/store/widgets-store";
 
 export const defaultWidgetTemplate: Omit<Widget, "id"> = {

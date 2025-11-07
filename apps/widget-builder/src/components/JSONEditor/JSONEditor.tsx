@@ -1,5 +1,6 @@
-import { useRef, useEffect } from "react";
 import Editor, { OnMount } from "@monaco-editor/react";
+import { useRef, useEffect } from "react";
+
 import type { editor } from "monaco-editor";
 
 interface JSONEditorProps {

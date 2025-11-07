@@ -1,17 +1,18 @@
+import { inferDataSchemaFromState, parseJSXTemplate } from "@deer-flow/widget";
+import { WidgetRenderer } from "@deer-flow/widget-renderer";
+import { Download, PlusIcon } from "lucide-react";
+import { JSXEditor } from "monaco-jsx-editor";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { JSXEditor } from "monaco-jsx-editor";
-import { WidgetRenderer } from "@deer-flow/widget-renderer";
-import { JSONEditor } from "@/components/JSONEditor";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Download, PlusIcon } from "lucide-react";
-import { definitions, components } from "@/components/widget-components";
-import { inferDataSchemaFromState, parseJSXTemplate } from "@deer-flow/widget";
+
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { clone } from "@/lib/utils";
-import { download } from "@/lib/download";
+import { JSONEditor } from "@/components/JSONEditor";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { definitions, components } from "@/components/widget-components";
 import { useWidgets, defaultWidgetTemplate } from "@/hooks/use-widgets";
+import { download } from "@/lib/download";
+import { clone } from "@/lib/utils";
 
 export const WidgetBuilder = () => {
   const { id } = useParams<{ id?: string }>();
@@ -73,7 +74,7 @@ export const WidgetBuilder = () => {
         data,
       };
       updateWidget(currentWidget.id, { states });
-    } catch (error) {
+    } catch {
       // Invalid JSON, ignore or show error
     }
   };

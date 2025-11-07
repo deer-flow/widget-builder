@@ -12,7 +12,7 @@ export type JSXLanguageOptions = {
   dataSchema?: JSONSchema4;
   allowedHTMLElements?: string[];
   disableAllHTMLElements?: boolean; // if true, no HTML elements are allowed
-  setupCompilerOptions?: (monaco: typeof Monaco) => Monaco.languages.typescript.CompilerOptions;
+  setupCompilerOptions?: (_monaco: typeof Monaco) => Monaco.languages.typescript.CompilerOptions;
 };
 
 export class JSXLanguage {
@@ -61,9 +61,9 @@ export class JSXLanguage {
       if (this.dataTypesDisposable) {
         this.dataTypesDisposable.dispose();
       }
-      // if (this.jsxCompletionDisposable) {
-      //   this.jsxCompletionDisposable.dispose();
-      // }
+      if (this.jsxCompletionDisposable) {
+        this.jsxCompletionDisposable.dispose();
+      }
 
       this.jsxHighlighter = null;
     });
