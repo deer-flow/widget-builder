@@ -41,6 +41,8 @@ export const WidgetGallery = () => {
     navigate(`/editor/${newWidget.id}`);
   };
 
+  const selectedWidgetData = selectedWidget !== null ? galleryWidgets[selectedWidget] : null;
+
   return (
     <div className="h-screen flex flex-col bg-background">
       {/* Header */}
@@ -105,12 +107,8 @@ export const WidgetGallery = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[90vh]">
           <DialogHeader>
-            <DialogTitle>
-              {selectedWidget !== null && galleryWidgets[selectedWidget].widget.name}
-            </DialogTitle>
-            <DialogDescription>
-              {selectedWidget !== null && galleryWidgets[selectedWidget].widget.description}
-            </DialogDescription>
+            <DialogTitle>{selectedWidgetData?.widget.name}</DialogTitle>
+            <DialogDescription>{selectedWidgetData?.widget.description}</DialogDescription>
           </DialogHeader>
 
           <ScrollArea className="max-h-[60vh]">
@@ -118,13 +116,13 @@ export const WidgetGallery = () => {
               {/* Widget Preview */}
               <div className="p-6 bg-muted/30 rounded-lg flex items-center justify-center">
                 <div className="w-full max-w-sm">
-                  {selectedWidget !== null && (
+                  {selectedWidgetData && (
                     <ErrorBoundary>
                       <WidgetRenderer
                         schema={undefined}
                         components={components}
-                        data={galleryWidgets[selectedWidget].widget.states?.[0]?.data ?? {}}
-                        template={galleryWidgets[selectedWidget].widget.template}
+                        data={selectedWidgetData.widget.states?.[0]?.data ?? {}}
+                        template={selectedWidgetData.widget.template}
                       />
                     </ErrorBoundary>
                   )}
@@ -144,7 +142,7 @@ export const WidgetGallery = () => {
                       fontSize: "0.875rem",
                     }}
                   >
-                    {selectedWidget !== null ? galleryWidgets[selectedWidget].widget.template || "" : ""}
+                    {selectedWidgetData?.widget.template || ""}
                   </SyntaxHighlighter>
                 </div>
               </div>
