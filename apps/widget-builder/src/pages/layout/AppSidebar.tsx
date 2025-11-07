@@ -1,4 +1,4 @@
-import { LayoutTemplate, PlusCircleIcon, Package } from "lucide-react";
+import { LayoutTemplate, PlusCircleIcon, Package, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import {
@@ -48,6 +48,14 @@ export function AppSidebar() {
                   <Link to="/editor">
                     <PlusCircleIcon />
                     <span>New Widget</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Widget Gallery" asChild>
+                  <Link to="/gallery">
+                    <Sparkles />
+                    <span>Gallery</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
