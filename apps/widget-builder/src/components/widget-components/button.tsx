@@ -28,6 +28,10 @@ const ButtonDefinition: ComponentDefinition = {
       description: "Click event handler for the button.",
     },
   ],
+  category: "Controls",
+  usage: `<Button size="sm">
+  Click Me
+</Button>`,
 };
 
 export { Button, ButtonDefinition };

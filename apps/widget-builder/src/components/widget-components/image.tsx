@@ -121,6 +121,15 @@ const ImageDefinition: ComponentDefinition = {
     },
     ...Variants.definitions,
   ],
+  category: "Display",
+  usage: `<Image 
+  src="https://picsum.photos/200/200" 
+  fit="contain" 
+  position="top" 
+  radius="md" 
+  size={200} 
+  margin="sm" 
+/>`,
 };
 
 export { Image, ImageDefinition };

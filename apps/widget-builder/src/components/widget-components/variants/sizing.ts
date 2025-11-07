@@ -60,6 +60,10 @@ export const Width = {
       // Check if it's a WidthVariant token
       if (WidthVariant.hasOwnProperty(width)) {
         return [`w-${WidthVariant[width as keyof typeof WidthVariant]}`, {}];
+      } else if (!isNaN(Number(width))) {
+        return `w-${width}`;
+      } else {
+        return `w-[${width}]`;
       }
     }
 
@@ -91,6 +95,10 @@ export const MinWidth = {
         styles.minWidth = minWidth;
       } else if (MinWidth.variant.hasOwnProperty(minWidth)) {
         classnames.push(`min-w-${MinWidth.variant[minWidth as keyof typeof MinWidth.variant]}`);
+      } else if (!isNaN(Number(minWidth))) {
+        classnames.push(`min-w-${minWidth}`);
+      } else {
+        classnames.push(`min-w-[${minWidth}]`);
       }
     }
 
@@ -122,6 +130,10 @@ export const Height = {
       // Check if it's a SizingVariant token
       if (HeightVariant.hasOwnProperty(height)) {
         return [`h-${HeightVariant[height as keyof typeof HeightVariant]}`, {}];
+      } else if (!isNaN(Number(height))) {
+        return `h-${height}`;
+      } else {
+        return `h-[${height}]`;
       }
     }
 
@@ -153,6 +165,10 @@ export const MinHeight = {
       // Fallback to predefined variant for compatibility
       if (MinHeight.variant.hasOwnProperty(minHeight)) {
         return [`min-h-${MinHeight.variant[minHeight as keyof typeof MinHeight.variant]}`, {}];
+      } else if (!isNaN(Number(minHeight))) {
+        return `min-h-${minHeight}`;
+      } else {
+        return `min-h-[${minHeight}]`;
       }
     }
 
@@ -187,6 +203,10 @@ export const Size = {
       if (SizeVariant.hasOwnProperty(size)) {
         const token = SizeVariant[size as keyof typeof SizeVariant];
         return [`w-${token} h-${token}`, {}];
+      } else if (!isNaN(Number(size))) {
+        return `w-${size} h-${size}`;
+      } else {
+        return `w-[${size}] h-[${size}]`;
       }
     }
 

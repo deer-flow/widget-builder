@@ -66,6 +66,8 @@ const TitleDefinition: ComponentDefinition = {
       description: "The content of the title.",
     },
   ],
+  category: "Typography",
+  usage: `<Title level="h2" weight="bold">This is a Level 2 Bold Title</Title>`,
 };
 
 export { Title, TitleDefinition };

@@ -1,4 +1,4 @@
-import { LayoutTemplate, PlusCircleIcon } from "lucide-react";
+import { LayoutTemplate, PlusCircleIcon, Package } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 
 export function AppSidebar() {
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" className="shrink-0">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -46,6 +46,14 @@ export function AppSidebar() {
                   <Link to="/editor">
                     <PlusCircleIcon />
                     <span>New Widget</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Browse Components" asChild>
+                  <Link to="/components">
+                    <Package />
+                    <span>Components</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

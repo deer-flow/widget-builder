@@ -9,7 +9,11 @@ export const BorderColor = {
   variant: BorderColorVariant,
   definition: {
     name: "borderColor",
-    type: "'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'muted' | 'light' | 'dark'",
+    type:
+      "'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'muted' | 'light' | 'dark'" +
+      " | '" +
+      Object.keys(ColorVariant).join("' | '") +
+      "'",
     required: false,
     description: "Sets the border color based on predefined color variants.",
   },
@@ -24,15 +28,7 @@ export const BorderColor = {
 export type BorderSetting = {
   size?: number;
   color?: keyof typeof BorderColorVariant | string;
-  style?:
-    | "solid"
-    | "dashed"
-    | "dotted"
-    | "double"
-    | "groove"
-    | "ridge"
-    | "inset"
-    | "outset";
+  style?: "solid" | "dashed" | "dotted" | "double" | "groove" | "ridge" | "inset" | "outset";
 };
 
 export type SideBorderSetting = {
@@ -92,9 +88,7 @@ export const Border = {
     description:
       "Border; accepts a border width in px, a border object with size, color, and style, or a side-specific border object.",
   },
-  format: (
-    border: BorderProps["border"]
-  ): string | [string, React.CSSProperties] => {
+  format: (border: BorderProps["border"]): string | [string, React.CSSProperties] => {
     if (border === undefined) return "";
 
     if (border === true) {
@@ -124,10 +118,7 @@ export const Border = {
             styles[`${key}Width` as const] = `${sideBorder.size}px`;
           }
           if (sideBorder?.color !== undefined) {
-            const [className, style] = formatBorderColor(
-              sideBorder.color,
-              side
-            );
+            const [className, style] = formatBorderColor(sideBorder.color, side);
             if (className) {
               classes.push(className);
             }

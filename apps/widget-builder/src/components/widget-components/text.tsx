@@ -52,5 +52,9 @@ const TextDefinition: ComponentDefinition = {
     },
     ...Variants.definitions,
   ],
+  category: "Typography",
+  usage: `<Text variant="label" size="lg" weight="bold" truncate={true}>
+  This is a label text.
+</Text>`,
 };
 export { Text, TextDefinition };

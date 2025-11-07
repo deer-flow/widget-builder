@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@import "./components/widget-components/variants/index.css";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -120,4 +122,10 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+html,
+body,
+#root {
+  @apply h-full;
 }

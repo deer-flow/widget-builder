@@ -49,10 +49,10 @@ import { JSXEditor, ComponentDefinition } from "monaco-jsx-editor";
 import { inferDataSchemaFromState, parseJSXTemplate } from "@deer-flow/widget";
 
 const definitions: ComponentDefinition[] = [...]; // Define your widget components here
-const dataSchema = {...}; // Dynamically infer data schema from states with `inferDataSchemaFromState`
+const dataSchema = {...}; // Dynamically infer data schema from states using `inferDataSchemaFromState`
 
 const handleTemplateChange = (newTemplate: string) => {
-  // Parse the jsx code to schema with `parseJSXTemplate`
+  // Parse the JSX code to a schema using `parseJSXTemplate`
 };
 
 <JSXEditor
@@ -72,7 +72,7 @@ import { components } from "./path-to-your-widget-components";
 const components = {
   Button: CustomButton,
   Card: CustomCard,
-  // ...other true components
+  // ...other components
 };
 
 <WidgetRenderer schema={widget.uiSchema} components={components} state={widgetState} />;

@@ -46,32 +46,13 @@ export interface ProgressProps
 }
 
 const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
-  (
-    {
-      className,
-      value = 0,
-      max = 100,
-      size,
-      variant,
-      color,
-      showValue,
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, value = 0, max = 100, size, variant, color, showValue, ...props }, ref) => {
     const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 
     return (
       <div className="w-full space-y-2">
-        <div
-          className={cn(ProgressBase({ size, variant, className }))}
-          ref={ref}
-          {...props}
-        >
-          <div
-            className={cn(ProgressBarBase({ color }))}
-            style={{ transform: `translateX(-${100 - percentage}%)` }}
-          />
+        <div className={cn(ProgressBase({ size, variant, className }))} ref={ref} {...props}>
+          <div className={cn(ProgressBarBase({ color }))} style={{ transform: `translateX(-${100 - percentage}%)` }} />
         </div>
         {showValue && (
           <div className="flex justify-between text-sm text-muted-foreground">
@@ -127,6 +108,8 @@ const ProgressDefinition: ComponentDefinition = {
       defaultValue: false,
     },
   ],
+  category: "Display",
+  usage: `<Progress value={40} max={100} color="success" showValue={true} />`,
 };
 
 export { Progress, ProgressDefinition };

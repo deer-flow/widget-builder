@@ -1,34 +1,29 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { cva, type VariantProps } from "class-variance-authority";
 import { BorderColor, variants, VariantsProps } from "./variants";
 import { ComponentDefinition } from "monaco-jsx-editor";
+import { Separator } from "@/components/ui/separator";
 
 const Variants = variants({
   color: BorderColor,
 });
 
-const Base = cva("border-border", {
-  variants: {
-    orientation: {
-      horizontal: "w-full border-t",
-      vertical: "h-full border-l",
-    },
-  },
-  defaultVariants: {
-    orientation: "horizontal",
-  },
-});
-
 export interface DividerProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "color">,
-    VariantProps<typeof Base>,
-    VariantsProps<typeof Variants> {}
+    VariantsProps<typeof Variants> {
+  orientation?: "horizontal" | "vertical";
+}
 
 const Divider = React.forwardRef<HTMLDivElement, DividerProps>(({ className, orientation, color, ...props }, ref) => {
   const [variantClasses, variantStyles] = Variants.format({ color });
   return (
-    <div className={cn(className, Base({ orientation }), variantClasses)} style={variantStyles} ref={ref} {...props} />
+    <Separator
+      className={cn(className, variantClasses)}
+      style={variantStyles}
+      ref={ref}
+      orientation={orientation}
+      {...props}
+    />
   );
 });
 
@@ -46,6 +41,12 @@ const DividerDefinition: ComponentDefinition = {
     },
     ...Variants.definitions,
   ],
+  category: "Layout",
+  usage: `<Row height="4" gap={2} align="center">
+  <Text>Left</Text>
+  <Divider orientation="vertical" />
+  <Text>Right</Text>
+</Row>`,
 };
 
 export { Divider, DividerDefinition };

@@ -53,6 +53,10 @@ const CaptionDefinition = {
   name: "Caption",
   description: "A text component for displaying captions with customizable styling.",
   props: Variants.definitions,
+  category: "Typography",
+  usage: `<Caption size="sm" weight="light" color="muted" textAlign="center" truncate={true}>
+  This is a caption text.
+</Caption>`,
 };
 
 export { Caption, CaptionDefinition };

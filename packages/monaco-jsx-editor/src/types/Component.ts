@@ -10,4 +10,6 @@ export interface ComponentDefinition {
   name: string;
   props: ComponentProp[];
   description?: string;
+  usage?: string;
+  category?: string;
 }

@@ -70,6 +70,18 @@ const ColDefinition: ComponentDefinition = {
   name: "Col",
   description: "A column flex container component with customizable styling.",
   props: Variants.definitions,
+  category: "Layout",
+  usage: `<Row width="lg" gap={2}>
+  <Col align="center" padding="md" background="muted" border="default" radius="md" flex="1" >
+    Col 1
+  </Col>
+  <Col align="start" padding="md" background="muted" border="default" radius="md" flex="2" >
+    Col 2
+  </Col>
+  <Col align="end" padding="md" background="muted" border="default" radius="md" flex="1">
+    Col 3
+  </Col>
+</Row>`,
 };
 
 export { Col, ColDefinition };

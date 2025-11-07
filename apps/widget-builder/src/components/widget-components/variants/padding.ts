@@ -20,20 +20,20 @@ export const Padding = {
     name: "padding",
     type: '"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | number',
     required: false,
-    description:
-      "Padding; accepts a padding token or a custom px number value.",
+    description: "Padding; accepts a padding token or a custom px number value.",
   },
-  format: (
-    padding: PaddingProps["padding"]
-  ): string | [string, React.CSSProperties] => {
+  format: (padding: PaddingProps["padding"]): string | [string, React.CSSProperties] => {
     if (padding === undefined) return "";
     if (typeof padding === "number") {
       return ["", { padding: `${padding}px` }];
     }
     if (Padding.variant.hasOwnProperty(padding)) {
       return Padding.variant[padding as keyof typeof Padding.variant];
+    } else if (!isNaN(Number(padding))) {
+      return `p-${padding}`;
+    } else {
+      return ["", { padding: `${padding}` }];
     }
-    return "";
   },
 };
 
@@ -61,9 +61,7 @@ export const Margin = {
     required: false,
     description: "Margin; accepts a margin token or a custom px number value.",
   },
-  format: (
-    margin: MarginProps["margin"]
-  ): string | [string, React.CSSProperties] => {
+  format: (margin: MarginProps["margin"]): string | [string, React.CSSProperties] => {
     if (margin === undefined) return "";
     if (typeof margin === "number") {
       return ["", { margin: `${margin}px` }];

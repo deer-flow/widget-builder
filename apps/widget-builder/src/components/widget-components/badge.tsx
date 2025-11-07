@@ -8,17 +8,12 @@ const Base = cva(
   {
     variants: {
       variant: {
-        default:
-          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive:
-          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
-        success:
-          "border-transparent bg-green-500 text-white hover:bg-green-500/80",
-        warning:
-          "border-transparent bg-yellow-500 text-white hover:bg-yellow-500/80",
+        success: "border-transparent bg-green-500 text-white hover:bg-green-500/80",
+        warning: "border-transparent bg-yellow-500 text-white hover:bg-yellow-500/80",
       },
       size: {
         sm: "px-2 py-0.5 text-xs",
@@ -33,23 +28,13 @@ const Base = cva(
   }
 );
 
-export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof Base> {
+export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof Base> {
   children: React.ReactNode;
 }
 
-const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
-  ({ className, variant, size, ...props }, ref) => {
-    return (
-      <div
-        className={cn(Base({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
+const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(({ className, variant, size, ...props }, ref) => {
+  return <div className={cn(Base({ variant, size, className }))} ref={ref} {...props} />;
+});
 Badge.displayName = "Badge";
 
 const BadgeDefinition: ComponentDefinition = {
@@ -74,6 +59,8 @@ const BadgeDefinition: ComponentDefinition = {
       description: "Content to display inside the badge.",
     },
   ],
+  category: "Display",
+  usage: `<Badge variant="success" size="lg">New</Badge>`,
 };
 
 export { Badge, BadgeDefinition };

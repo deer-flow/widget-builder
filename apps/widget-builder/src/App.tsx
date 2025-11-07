@@ -3,19 +3,22 @@ import { AppSidebar } from "@/pages/layout";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { WidgetBuilder } from "@/pages/builder";
 import { WidgetGallery } from "@/pages/gallery";
+import { WidgetComponents } from "@/pages/components";
 
 function App() {
   return (
     <BrowserRouter basename={import.meta.env.MODE === "production" ? "/widget-builder" : ""}>
-      <SidebarProvider defaultOpen>
+      <SidebarProvider defaultOpen className="h-full">
         <AppSidebar />
-        <SidebarInset>
+        <SidebarInset className="overflow-hidden">
           <div className="flex h-full flex-1 flex-col">
             <Routes>
               <Route path="/" element={<Navigate to="/editor" replace />} />
               <Route path="/editor" element={<WidgetBuilder />} />
               <Route path="/editor/:id" element={<WidgetBuilder />} />
               <Route path="/gallery" element={<WidgetGallery />} />
+              <Route path="/components" element={<Navigate to="/components/card" replace />} />
+              <Route path="/components/:name" element={<WidgetComponents />} />
             </Routes>
           </div>
         </SidebarInset>

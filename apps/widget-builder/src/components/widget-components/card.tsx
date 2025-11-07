@@ -69,6 +69,10 @@ const CardDefinition: ComponentDefinition = {
     },
     ...Variants.definitions,
   ],
+  category: "Layout",
+  usage: `<Card size="3xl" padding="md" background="sky-500" border="default" radius="md">
+  <Text>This is a card component.</Text>
+</Card>`,
 };
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(

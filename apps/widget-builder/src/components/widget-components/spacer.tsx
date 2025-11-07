@@ -41,6 +41,12 @@ const SpacerDefinition: ComponentDefinition = {
   name: "Spacer",
   description: "Flexible space to separate content within a layout.",
   props: [...Variants.definitions],
+  category: "Layout",
+  usage: `<Row width="lg" padding="4" background="muted">
+  <Text>Left Content</Text>
+  <Spacer />
+  <Text>Right Content</Text>
+</Row>`,
 };
 
 export { Spacer, SpacerDefinition };

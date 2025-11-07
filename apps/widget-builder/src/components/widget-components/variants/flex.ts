@@ -91,8 +91,8 @@ export const Wrap = {
 };
 
 export const FlexVariant = {
-  none: "flex-none",
-  auto: "flex-auto",
+  none: "none",
+  auto: "auto",
 } as const;
 
 export interface FlexProps {
@@ -112,23 +112,17 @@ export const Flex = {
     if (flex === undefined) return "";
 
     if (typeof flex === "number") {
-      return `flex-[${flex}]`;
+      return `flex-${flex}`;
     }
 
     if (typeof flex === "string") {
-      // Handle common flex values
-      const commonFlexValues = {
-        "1": "flex-1",
-        auto: "flex-auto",
-        initial: "flex-initial",
-        none: "flex-none",
-      };
-
-      if (commonFlexValues[flex as keyof typeof commonFlexValues]) {
-        return commonFlexValues[flex as keyof typeof commonFlexValues];
+      if (Flex.variant.hasOwnProperty(flex)) {
+        return `flex-${Flex.variant[flex as keyof typeof Flex.variant]}`;
       }
-
-      return `flex-[${flex}]`;
+      if (!isNaN(Number(flex))) {
+        return `flex-${flex}`;
+      }
+      return `flex-(${flex})`;
     }
 
     return "";
