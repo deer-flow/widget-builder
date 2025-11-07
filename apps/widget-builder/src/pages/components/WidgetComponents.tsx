@@ -122,7 +122,7 @@ function ComponentDetails({ component }: ComponentDetailsProps) {
             <div>
               <h2 className="text-lg font-semibold mb-4">Usage</h2>
               <div className="rounded-md">
-                <SyntaxHighlighter language="javascript" style={atomDark}>
+                <SyntaxHighlighter language="javascript" style={atomDark} className="text-sm">
                   {component.usage}
                 </SyntaxHighlighter>
               </div>

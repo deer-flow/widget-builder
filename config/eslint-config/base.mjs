@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 
 export const base = [
   {
-    ignores: ["**/build/**", "**/dist/**"],
+    ignores: ["**/build/**", "**/dist/**", "**/node_modules/**"],
   },
   tseslint.configs.recommended,
   {
