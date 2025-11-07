@@ -35,7 +35,7 @@ export const web = [
         "error",
         {
           groups: [
-            "builtin", // Built-in types are first
+            "builtin", // Built-in Node.js modules are first
             "external", // External libraries
             "internal", // Internal modules (aliased with @/)
             ["parent", "sibling"], // Relative imports (../ and ./)
