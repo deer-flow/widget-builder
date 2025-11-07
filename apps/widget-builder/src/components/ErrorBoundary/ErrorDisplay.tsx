@@ -1,5 +1,6 @@
-import { Button } from "../ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+
+import { Button } from "../ui/button";
 
 export interface ErrorDisplayProps {
   error: Error;

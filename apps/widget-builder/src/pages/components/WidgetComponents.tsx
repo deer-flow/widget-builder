@@ -1,20 +1,17 @@
-import React from "react";
-import { useParams, Link } from "react-router-dom";
-import { components, definitions } from "@/components/widget-components";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
-
-import { ComponentDefinition, ComponentProp } from "monaco-jsx-editor";
-import { cn } from "@/lib/utils";
 import { parseJSXTemplate } from "@deer-flow/widget";
 import { WidgetRenderer } from "@deer-flow/widget-renderer";
-import { Editor } from "@monaco-editor/react";
+import { ComponentDefinition, ComponentProp } from "monaco-jsx-editor";
+import React from "react";
+import { useParams, Link } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-interface WidgetComponentsProps {}
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { components, definitions } from "@/components/widget-components";
+import { cn } from "@/lib/utils";
 
-export function WidgetComponents({}: WidgetComponentsProps) {
+export function WidgetComponents() {
   const { name } = useParams<{ name: string }>();
 
   // Find the selected component definition

@@ -30,7 +30,7 @@ export function download(content: string, filename: string, mimeType: string = "
  * @param data - 要下载的数据对象
  * @param filename - 下载的文件名
  */
-export function downloadJSON(data: any, filename: string): void {
+export function downloadJSON(data: unknown, filename: string): void {
   const jsonString = JSON.stringify(data, null, 2);
   download(jsonString, filename, "application/json");
 }

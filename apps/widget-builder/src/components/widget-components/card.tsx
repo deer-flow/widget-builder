@@ -1,8 +1,11 @@
-import React from "react";
-import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
-import { Background, Border, variants, Padding, Radius, VariantsProps, Width } from "./variants";
 import { ComponentDefinition } from "monaco-jsx-editor";
+import React from "react";
+
+import { cn } from "@/lib/utils";
+
+import { Background, Border, variants, Padding, Radius, VariantsProps, Width } from "./variants";
+
 
 const Base = cva("rounded-2xl border bg-card text-card-foreground shadow p-4", {
   variants: {

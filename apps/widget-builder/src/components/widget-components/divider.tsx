@@ -1,8 +1,10 @@
-import React from "react";
-import { cn } from "@/lib/utils";
-import { BorderColor, variants, VariantsProps } from "./variants";
 import { ComponentDefinition } from "monaco-jsx-editor";
+import React from "react";
+
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+
+import { BorderColor, variants, VariantsProps } from "./variants";
 
 const Variants = variants({
   color: BorderColor,

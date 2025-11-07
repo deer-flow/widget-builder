@@ -3,7 +3,7 @@ export interface ComponentProp {
   type: string;
   required?: boolean;
   description?: string;
-  defaultValue?: any;
+  defaultValue?: unknown;
 }
 
 export interface ComponentDefinition {

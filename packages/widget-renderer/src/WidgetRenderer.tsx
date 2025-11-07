@@ -5,11 +5,11 @@ import { ComponentType } from "react";
 export type WidgetRendererProps = {
   schema?: JSXElementSchema;
   components: Record<string, ComponentType<unknown>>;
-  data?: object;
+  data?: Record<string, unknown>;
 };
 
 // Helper to resolve expression values from data context
-function resolveValue(value: any, data: Record<string, any>): any {
+function resolveValue(value: JSXElementSchema["value"], data: Record<string, unknown>): unknown {
   if (typeof value === "object" && value !== null && value.__expression) {
     const expression = value.__expression;
     try {
@@ -22,11 +22,7 @@ function resolveValue(value: any, data: Record<string, any>): any {
   return value;
 }
 
-export function WidgetRenderer({
-  schema,
-  components,
-  data,
-}: WidgetRendererProps): React.ReactElement | null {
+export function WidgetRenderer({ schema, components, data }: WidgetRendererProps): React.ReactElement | null {
   if (!schema) {
     return null;
   }
@@ -49,12 +45,12 @@ export function WidgetRenderer({
       // Resolve component from the map, or fall back to a string for native HTML elements
       const Component = components[schema.name] || schema.name;
 
-      const props: Record<string, any> = {};
+      const props: Record<string, unknown> = {};
       if (schema.props) {
         for (const key in schema.props) {
           if (Object.prototype.hasOwnProperty.call(schema.props, key)) {
             // Resolve prop values, which might be expressions
-            props[key] = resolveValue(schema.props[key], data ?? {});
+            props[key] = resolveValue(schema.props[key] as JSXElementSchema["value"], data ?? {});
           }
         }
       }
@@ -62,12 +58,7 @@ export function WidgetRenderer({
       // Recursively render children
       const children = schema.children
         ? schema.children.map((child, index) => (
-            <WidgetRenderer
-              key={index}
-              schema={child}
-              components={components}
-              data={data}
-            />
+            <WidgetRenderer key={index} schema={child} components={components} data={data} />
           ))
         : undefined;
 

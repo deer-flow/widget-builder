@@ -20,7 +20,7 @@ export const Align = {
   format: (align: AlignProps["align"]): string => {
     if (align === undefined) return "";
 
-    if (Align.variant.hasOwnProperty(align)) {
+    if (align in Align.variant) {
       return Align.variant[align as keyof typeof Align.variant];
     }
 
@@ -53,7 +53,7 @@ export const Justify = {
   format: (justify: JustifyProps["justify"]): string => {
     if (justify === undefined) return "";
 
-    if (Justify.variant.hasOwnProperty(justify)) {
+    if (justify in Justify.variant) {
       return Justify.variant[justify as keyof typeof Justify.variant];
     }
 
@@ -82,7 +82,7 @@ export const Wrap = {
   format: (wrap: WrapProps["wrap"]): string => {
     if (wrap === undefined) return "";
 
-    if (Wrap.variant.hasOwnProperty(wrap)) {
+    if (wrap in Wrap.variant) {
       return Wrap.variant[wrap as keyof typeof Wrap.variant];
     }
 
@@ -116,7 +116,7 @@ export const Flex = {
     }
 
     if (typeof flex === "string") {
-      if (Flex.variant.hasOwnProperty(flex)) {
+      if (flex in Flex.variant) {
         return `flex-${Flex.variant[flex as keyof typeof Flex.variant]}`;
       }
       if (!isNaN(Number(flex))) {

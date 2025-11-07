@@ -1,4 +1,5 @@
 import { ComponentProp } from "monaco-jsx-editor";
+
 import { Variant } from "./types";
 
 // Re-export all variant maps
@@ -33,10 +34,15 @@ export function variants<T extends Record<string, Variant>>(
   }) => readonly [string, React.CSSProperties];
 } {
   // Merge all variant maps
-  const variants = Object.keys(variantMaps).reduce((acc, key) => {
-    acc[key] = variantMaps[key].variant;
-    return acc;
-  }, {} as any);
+  const variants = Object.keys(variantMaps).reduce(
+    (acc, key) => {
+      return {
+        ...acc,
+        [key]: variantMaps[key].variant,
+      };
+    },
+    {} as { [K in keyof T]: T[K]["variant"] }
+  );
 
   // Merge all definitions
   const definitions = Object.keys(variantMaps).reduce((acc, key) => {
@@ -48,7 +54,7 @@ export function variants<T extends Record<string, Variant>>(
   }, [] as ComponentProp[]);
 
   // Create combined format function
-  const format = (values: any) => {
+  const format = (values: Record<string, unknown>) => {
     const classNames: string[] = [];
     const styles: React.CSSProperties = {};
 
@@ -76,6 +82,7 @@ export function variants<T extends Record<string, Variant>>(
  * Utility type to extract format parameter type from combine result
  */
 export type VariantsProps<T> = T extends {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   format: (values: infer P) => any;
 }
   ? P

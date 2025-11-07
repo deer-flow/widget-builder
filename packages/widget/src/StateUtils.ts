@@ -1,4 +1,5 @@
-import { JSONSchema4, JSONSchema4TypeName } from "json-schema";
+import { JSONSchema4, JSONSchema4Type, JSONSchema4TypeName } from "json-schema";
+
 import { WidgetState } from "./Widget";
 
 /**
@@ -46,7 +47,7 @@ export function inferDataSchemaFromState(states: WidgetState[]): JSONSchema4 {
   return schema;
 }
 
-function inferObjectsSchema(states: object[], defaults?: object): JSONSchema4 {
+function inferObjectsSchema(states: Record<string, unknown>[], defaults?: Record<string, unknown>): JSONSchema4 {
   const properties: JSONSchema4["properties"] = {};
   const required: string[] = [];
   const schema: JSONSchema4 = { type: "object", properties, required };
@@ -64,8 +65,8 @@ function inferObjectsSchema(states: object[], defaults?: object): JSONSchema4 {
   });
 
   keys.forEach((key) => {
-    const values = validStates.map((state) => (state as any)[key]);
-    const allHaveKey = validStates.every((state) => (state as any).hasOwnProperty(key));
+    const values = validStates.map((state) => state[key]);
+    const allHaveKey = validStates.every((state) => Object.prototype.hasOwnProperty.call(state, key));
     if (allHaveKey) {
       required.push(key);
     }
@@ -73,7 +74,7 @@ function inferObjectsSchema(states: object[], defaults?: object): JSONSchema4 {
     // Infer type
     const types = new Set<JSONSchema4TypeName>();
     const objectValues: WidgetState[] = [];
-    const arrayValues: any[][] = [];
+    const arrayValues: unknown[][] = [];
     values.forEach((value) => {
       const valueType = Array.isArray(value) ? "array" : typeof value;
       if (
@@ -90,7 +91,7 @@ function inferObjectsSchema(states: object[], defaults?: object): JSONSchema4 {
       }
 
       if (valueType === "array") {
-        arrayValues.push(value as any[]);
+        arrayValues.push(value as unknown[]);
       } else if (valueType === "object" && value !== null) {
         objectValues.push(value as WidgetState);
       }
@@ -98,13 +99,13 @@ function inferObjectsSchema(states: object[], defaults?: object): JSONSchema4 {
 
     if (objectValues.length === 0 && arrayValues.length === 0 && types.size > 0) {
       const propertySchema: JSONSchema4 = { type: Array.from(types) };
-      if (defaults && (defaults as any).hasOwnProperty(key)) {
-        propertySchema.default = (defaults as any)[key];
+      if (defaults && Object.prototype.hasOwnProperty.call(defaults, key)) {
+        propertySchema.default = defaults[key] as JSONSchema4Type;
       }
       properties[key] = propertySchema;
     } else if (objectValues.length > 0) {
       // Complex type - object
-      const objectSchema = inferObjectsSchema(objectValues, (defaults as any)?.[key]);
+      const objectSchema = inferObjectsSchema(objectValues, defaults?.[key] as Record<string, unknown>);
       properties[key] =
         types.size > 1
           ? {
@@ -119,8 +120,8 @@ function inferObjectsSchema(states: object[], defaults?: object): JSONSchema4 {
     } else if (arrayValues.length > 0) {
       // Complex type - array
       const arraySchema: JSONSchema4 = { type: "array" };
-      if (defaults && (defaults as any).hasOwnProperty(key)) {
-        arraySchema.default = (defaults as any)[key];
+      if (defaults && Object.prototype.hasOwnProperty.call(defaults, key)) {
+        arraySchema.default = defaults[key] as JSONSchema4Type;
       }
       properties[key] = arraySchema;
     }

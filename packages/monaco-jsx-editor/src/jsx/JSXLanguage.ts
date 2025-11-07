@@ -1,18 +1,18 @@
+import { JSONSchema4 } from "json-schema";
 import * as Monaco from "monaco-editor";
 import { getWorker, MonacoJsxSyntaxHighlight } from "monaco-jsx-syntax-highlight";
-import { JSONSchema4 } from "json-schema";
 
 import { ComponentDefinition } from "../types";
 import { generateComponentTypes } from "./ComponentTypes";
-import { ReactTypes } from "./ReactTypes";
 import { generateDataTypes } from "./DataTypes";
+import { ReactTypes } from "./ReactTypes";
 
 export type JSXLanguageOptions = {
   components?: ComponentDefinition[];
   dataSchema?: JSONSchema4;
   allowedHTMLElements?: string[];
   disableAllHTMLElements?: boolean; // if true, no HTML elements are allowed
-  setupCompilerOptions?: (monaco: typeof Monaco) => Monaco.languages.typescript.CompilerOptions;
+  setupCompilerOptions?: (_monaco: typeof Monaco) => Monaco.languages.typescript.CompilerOptions;
 };
 
 export class JSXLanguage {
@@ -61,9 +61,9 @@ export class JSXLanguage {
       if (this.dataTypesDisposable) {
         this.dataTypesDisposable.dispose();
       }
-      // if (this.jsxCompletionDisposable) {
-      //   this.jsxCompletionDisposable.dispose();
-      // }
+      if (this.jsxCompletionDisposable) {
+        this.jsxCompletionDisposable.dispose();
+      }
 
       this.jsxHighlighter = null;
     });

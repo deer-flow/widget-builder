@@ -1,7 +1,9 @@
-import React from "react";
-import { cn } from "@/lib/utils";
-import { Background, Border, variants, Padding, Radius, VariantsProps, Size } from "./variants";
 import { ComponentDefinition } from "monaco-jsx-editor";
+import React from "react";
+
+import { cn } from "@/lib/utils";
+
+import { Background, Border, variants, Padding, Radius, VariantsProps, Size } from "./variants";
 
 const Variants = variants({
   size: Size,

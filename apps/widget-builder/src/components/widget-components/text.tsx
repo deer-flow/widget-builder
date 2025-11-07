@@ -1,7 +1,9 @@
-import React from "react";
-import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ComponentDefinition } from "monaco-jsx-editor";
+import React from "react";
+
+import { cn } from "@/lib/utils";
+
 import { FontSize, FontWeight, Truncate, variants, VariantsProps } from "./variants";
 
 const Base = cva("text-foreground", {
@@ -33,9 +35,16 @@ export interface TextProps
 }
 
 const Text = React.forwardRef<HTMLSpanElement, TextProps>(
-  ({ className, variant, as: Component = "span", size, weight, truncate, ...props }, ref) => {
+  ({ className, variant, as: Component = "span", style, size, weight, truncate, ...props }, ref) => {
     const [variantClasses, variantStyles] = Variants.format({ size, weight, truncate });
-    return <Component className={cn(Base({ variant, className }), variantClasses)} ref={ref} {...props} />;
+    return (
+      <Component
+        className={cn(Base({ variant, className }), variantClasses)}
+        style={{ ...variantStyles, ...style }}
+        ref={ref}
+        {...props}
+      />
+    );
   }
 );
 Text.displayName = "Text";

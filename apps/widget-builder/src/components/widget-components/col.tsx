@@ -1,6 +1,9 @@
-import React from "react";
-import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
+import { ComponentDefinition } from "monaco-jsx-editor";
+import React from "react";
+
+import { cn } from "@/lib/utils";
+
 import {
   Background,
   Border,
@@ -13,7 +16,6 @@ import {
   MinWidth,
   MinHeight,
 } from "./variants";
-import { ComponentDefinition } from "monaco-jsx-editor";
 
 const Base = cva("flex flex-col", {
   variants: {},
