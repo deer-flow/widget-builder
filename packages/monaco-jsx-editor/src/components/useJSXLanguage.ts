@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+
 import { JSXLanguage, JSXLanguageOptions } from "../jsx";
 
 export function useJSXLanguage(options: JSXLanguageOptions) {

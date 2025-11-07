@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { JSONSchema4 } from "json-schema";
+
 import { inferDataSchemaFromState } from "../StateUtils";
 import { WidgetState } from "../Widget";
 

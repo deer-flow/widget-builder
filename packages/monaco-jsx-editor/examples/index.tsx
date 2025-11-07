@@ -1,8 +1,10 @@
-import { Editor, EditorProps } from "@monaco-editor/react";
+import { Editor } from "@monaco-editor/react";
+import { JSONSchema4 } from "json-schema";
+import { createRoot } from "react-dom/client";
+
 import { JSXLanguage } from "../src";
 import { exampleComponents } from "./component-types";
-import { createRoot } from "react-dom/client";
-import { JSONSchema4 } from "json-schema";
+
 
 const dataSchema: JSONSchema4 = {
   type: "object",

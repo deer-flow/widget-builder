@@ -1,11 +1,11 @@
+import { JSONSchema4 } from "json-schema";
 import * as Monaco from "monaco-editor";
 import { getWorker, MonacoJsxSyntaxHighlight } from "monaco-jsx-syntax-highlight";
-import { JSONSchema4 } from "json-schema";
 
 import { ComponentDefinition } from "../types";
 import { generateComponentTypes } from "./ComponentTypes";
-import { ReactTypes } from "./ReactTypes";
 import { generateDataTypes } from "./DataTypes";
+import { ReactTypes } from "./ReactTypes";
 
 export type JSXLanguageOptions = {
   components?: ComponentDefinition[];

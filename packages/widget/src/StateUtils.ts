@@ -1,4 +1,5 @@
 import { JSONSchema4, JSONSchema4TypeName } from "json-schema";
+
 import { WidgetState } from "./Widget";
 
 /**
