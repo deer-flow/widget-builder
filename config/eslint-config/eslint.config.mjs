@@ -1,5 +1,5 @@
 import { defineConfig } from "eslint/config";
 
-import { web } from "./web.mjs";
+import { base } from "./base.mjs";
 
-export default defineConfig(web);
+export default defineConfig(base);
