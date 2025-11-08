@@ -41,6 +41,13 @@ export const WidgetGallery = () => {
     navigate(`/editor/${newWidget.id}`);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent, index: number) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleWidgetClick(index);
+    }
+  };
+
   const selectedWidgetData = selectedWidget !== null ? galleryWidgets[selectedWidget] : null;
 
   return (
@@ -63,8 +70,12 @@ export const WidgetGallery = () => {
             {galleryWidgets.map((item, index) => (
               <div
                 key={index}
-                className="group relative cursor-pointer rounded-lg border bg-card p-6 hover:border-primary hover:shadow-lg transition-all"
+                role="button"
+                tabIndex={0}
+                className="group relative cursor-pointer rounded-lg border bg-card p-6 hover:border-primary hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 onClick={() => handleWidgetClick(index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+                aria-label={`View ${item.widget.name} details`}
               >
                 <div className="flex flex-col gap-4">
                   {/* Widget Preview */}
