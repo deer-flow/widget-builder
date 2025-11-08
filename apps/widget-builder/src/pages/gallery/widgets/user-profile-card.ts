@@ -18,7 +18,7 @@ export const userProfileCard: Omit<Widget, "id"> = {
     </Col>
   </Row>
   
-  <Divider margin="md" />
+  <Divider margin={{ y: "md" }} />
   
   <Row gap={4} justify="around">
     <Col align="center" gap={1}>
@@ -34,9 +34,9 @@ export const userProfileCard: Omit<Widget, "id"> = {
       <Caption>Posts</Caption>
     </Col>
   </Row>
-  
-  <Divider margin="md" />
-  
+
+  <Divider margin={{ y: "md" }} />
+
   <Row gap={2}>
     <Button size="sm" variant="default">Follow</Button>
     <Button size="sm" variant="outline">Message</Button>
@@ -53,9 +53,9 @@ export const userProfileCard: Omit<Widget, "id"> = {
         stats: {
           followers: "2.4K",
           following: "486",
-          posts: "127"
-        }
-      }
-    }
-  ]
+          posts: "127",
+        },
+      },
+    },
+  ],
 };

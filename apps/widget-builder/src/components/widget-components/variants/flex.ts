@@ -1,3 +1,5 @@
+import { Variant } from "./types";
+
 export const AlignVariant = {
   start: "items-start",
   center: "items-center",
@@ -125,6 +127,42 @@ export const Flex = {
       return `flex-(${flex})`;
     }
 
+    return "";
+  },
+};
+
+export const Shrink: Variant = {
+  variant: {},
+  definition: {
+    name: "shrink",
+    type: "number | string",
+    description: "Sets the flex-shrink property of the flex container.",
+  },
+  format: (shrink: number | string | undefined): string | [string, React.CSSProperties] => {
+    if (typeof shrink === "number") {
+      return ["", { flexShrink: shrink }];
+    }
+    if (typeof shrink === "string" && !isNaN(Number(shrink))) {
+      return `shrink-${shrink}`;
+    }
+    return "";
+  },
+};
+
+export const Grow: Variant = {
+  variant: {},
+  definition: {
+    name: "grow",
+    type: "number | string",
+    description: "Sets the flex-grow property of the flex container.",
+  },
+  format: (grow: number | string | undefined): string | [string, React.CSSProperties] => {
+    if (typeof grow === "number") {
+      return ["", { flexGrow: grow }];
+    }
+    if (typeof grow === "string") {
+      return `grow-${grow}`;
+    }
     return "";
   },
 };

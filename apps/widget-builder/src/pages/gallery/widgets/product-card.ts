@@ -28,7 +28,7 @@ export const productCard: Omit<Widget, "id"> = {
     <Row align="center" justify="between">
       <Col gap={0}>
         <Title level="h3">{data.price}</Title>
-        {data.oldPrice && <Text size="sm" color="muted" style="text-decoration: line-through">{data.oldPrice}</Text>}
+        <Text size="sm" color="muted" style={{textDecoration: "line-through"}}>{data.oldPrice}</Text>
       </Col>
       <Button size="sm">Add to Cart</Button>
     </Row>
@@ -44,8 +44,8 @@ export const productCard: Omit<Widget, "id"> = {
         category: "Audio",
         price: "$299",
         oldPrice: "$399",
-        rating: "4.8"
-      }
-    }
-  ]
+        rating: "4.8",
+      },
+    },
+  ],
 };

@@ -1,4 +1,8 @@
 export const ColorVariant = {
+  white: "white",
+  black: "black",
+  transparent: "transparent",
+
   "red-50": "red-50",
   "red-100": "red-100",
   "red-200": "red-200",

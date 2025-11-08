@@ -4,10 +4,11 @@ import React from "react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-import { BorderColor, variants, VariantsProps } from "./variants";
+import { BorderColor, Margin, variants, VariantsProps } from "./variants";
 
 const Variants = variants({
   color: BorderColor,
+  margin: Margin,
 });
 
 export interface DividerProps
@@ -16,18 +17,20 @@ export interface DividerProps
   orientation?: "horizontal" | "vertical";
 }
 
-const Divider = React.forwardRef<HTMLDivElement, DividerProps>(({ className, orientation, color, ...props }, ref) => {
-  const [variantClasses, variantStyles] = Variants.format({ color });
-  return (
-    <Separator
-      className={cn(className, variantClasses)}
-      style={variantStyles}
-      ref={ref}
-      orientation={orientation}
-      {...props}
-    />
-  );
-});
+const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
+  ({ className, orientation, color, margin, ...props }, ref) => {
+    const [variantClasses, variantStyles] = Variants.format({ color, margin });
+    return (
+      <Separator
+        className={cn(className, variantClasses)}
+        style={variantStyles}
+        ref={ref}
+        orientation={orientation}
+        {...props}
+      />
+    );
+  }
+);
 
 Divider.displayName = "Divider";
 

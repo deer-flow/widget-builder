@@ -3,14 +3,34 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
-import { Background, Border, variants, Padding, Radius, VariantsProps, Size } from "./variants";
+import {
+  Background,
+  Border,
+  variants,
+  Padding,
+  Radius,
+  VariantsProps,
+  Size,
+  Align,
+  Justify,
+  Grow,
+  Shrink,
+  Margin,
+  Gap,
+} from "./variants";
 
 const Variants = variants({
   size: Size,
+  margin: Margin,
   padding: Padding,
   background: Background,
   border: Border,
   radius: Radius,
+  align: Align,
+  justify: Justify,
+  grow: Grow,
+  shrink: Shrink,
+  gap: Gap,
 });
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement>, VariantsProps<typeof Variants> {
@@ -18,12 +38,44 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement>, Variants
 }
 
 const Box = React.forwardRef<HTMLDivElement, BoxProps>(
-  ({ className, children, as: Component = "div", style, size, padding, background, border, radius, ...props }, ref) => {
+  (
+    {
+      className,
+      children,
+      as: Component = "div",
+      style,
+      size,
+      margin,
+      padding,
+      background,
+      border,
+      radius,
+      align,
+      justify,
+      grow,
+      shrink,
+      gap,
+      ...props
+    },
+    ref
+  ) => {
     // Merge with existing style prop
-    const [variantClasses, variantStyles] = Variants.format({ size, padding, background, border, radius });
+    const [variantClasses, variantStyles] = Variants.format({
+      size,
+      margin,
+      padding,
+      background,
+      border,
+      radius,
+      align,
+      justify,
+      grow,
+      shrink,
+      gap,
+    });
     return (
       <Component
-        className={cn("block", variantClasses, className)}
+        className={cn("flex", variantClasses, className)}
         style={{ ...style, ...variantStyles }}
         ref={ref}
         {...props}

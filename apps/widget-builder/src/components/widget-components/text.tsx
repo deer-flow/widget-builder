@@ -4,7 +4,7 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
-import { FontSize, FontWeight, Truncate, variants, VariantsProps } from "./variants";
+import { FontSize, FontWeight, TextColor, Truncate, variants, VariantsProps } from "./variants";
 
 const Base = cva("text-foreground", {
   variants: {
@@ -24,6 +24,7 @@ const Variants = variants({
   size: FontSize,
   weight: FontWeight,
   truncate: Truncate,
+  color: TextColor,
 });
 
 export interface TextProps
@@ -35,8 +36,8 @@ export interface TextProps
 }
 
 const Text = React.forwardRef<HTMLSpanElement, TextProps>(
-  ({ className, variant, as: Component = "span", style, size, weight, truncate, ...props }, ref) => {
-    const [variantClasses, variantStyles] = Variants.format({ size, weight, truncate });
+  ({ className, variant, as: Component = "span", style, size, weight, truncate, color, ...props }, ref) => {
+    const [variantClasses, variantStyles] = Variants.format({ size, weight, truncate, color });
     return (
       <Component
         className={cn(Base({ variant, className }), variantClasses)}

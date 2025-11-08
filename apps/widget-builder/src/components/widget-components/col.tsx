@@ -15,6 +15,9 @@ import {
   Align,
   MinWidth,
   MinHeight,
+  Grow,
+  Shrink,
+  Gap,
 } from "./variants";
 
 const Base = cva("flex flex-col", {
@@ -29,6 +32,9 @@ const Variants = variants({
   border: Border,
   radius: Radius,
   flex: Flex,
+  grow: Grow,
+  shrink: Shrink,
+  gap: Gap,
   minWidth: MinWidth,
   minHeight: MinHeight,
 });
@@ -39,7 +45,23 @@ export interface ColProps extends React.HTMLAttributes<HTMLDivElement>, Variants
 
 const Col = React.forwardRef<HTMLDivElement, ColProps>(
   (
-    { className, children, style, align, padding, background, border, radius, flex, minWidth, minHeight, ...props },
+    {
+      className,
+      children,
+      style,
+      align,
+      padding,
+      background,
+      border,
+      radius,
+      flex,
+      grow,
+      shrink,
+      gap,
+      minWidth,
+      minHeight,
+      ...props
+    },
     ref
   ) => {
     const [variantClasses, variantStyles] = Variants.format({
@@ -49,6 +71,9 @@ const Col = React.forwardRef<HTMLDivElement, ColProps>(
       border,
       radius,
       flex,
+      grow,
+      shrink,
+      gap,
       minWidth,
       minHeight,
     });

@@ -3,7 +3,7 @@ import { Widget } from "@deer-flow/widget";
 export const weatherWidget: Omit<Widget, "id"> = {
   name: "Weather Widget",
   description: "Current weather conditions with forecast",
-  template: `<Card size="md" padding="lg" background="gradient-to-br from-blue-400 to-blue-600">
+  template: `<Card size="md" padding="lg" background="linear-gradient(111deg, #1769C8 0%, #258AE3 56.92%, #31A3F8 100%)">
   <Col gap={2}>
     <Row align="center" justify="between">
       <Col gap={1}>
@@ -18,9 +18,7 @@ export const weatherWidget: Omit<Widget, "id"> = {
       <Text size="2xl" color="white">°C</Text>
     </Row>
     
-    <Text color="white" weight="medium">{data.condition}</Text>
-    
-    <Divider margin="sm" />
+    <Divider margin={{y: "sm"}} />
     
     <Row gap={4} justify="around">
       <Col align="center" gap={1}>
@@ -46,11 +44,10 @@ export const weatherWidget: Omit<Widget, "id"> = {
         date: "Monday, Nov 7",
         icon: "☀️",
         temperature: "22",
-        condition: "Sunny",
         humidity: "65",
         wind: "12",
-        feelsLike: "24"
-      }
-    }
-  ]
+        feelsLike: "24",
+      },
+    },
+  ],
 };

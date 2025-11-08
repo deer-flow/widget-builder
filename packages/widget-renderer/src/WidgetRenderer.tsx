@@ -25,29 +25,38 @@ function resolveValue(value: JSXElementSchema["value"], data: Record<string, unk
 
 export function WidgetRenderer({ schema, components, data, template }: WidgetRendererProps): React.ReactElement | null {
   // Cache the parsed schema to avoid re-parsing on every render
-  const parsedSchemaRef = useRef<JSXElementSchema | null>(null);
-  const lastTemplateRef = useRef<string | undefined>(undefined);
+  const schemaRef = useRef<JSXElementSchema | null>(schema);
+  const lastTemplateRef = useRef<string | undefined>(template);
+
+  if (!schemaRef.current && template) {
+    const parseResult = parseJSXTemplate(template);
+    if (parseResult.success && parseResult.schema) {
+      schemaRef.current = parseResult.schema;
+    } else {
+      console.warn("Failed to parse template:", parseResult.errors);
+    }
+  }
 
   // Parse template only when it changes
   useEffect(() => {
     if (template && template !== lastTemplateRef.current) {
       const parseResult = parseJSXTemplate(template);
       if (parseResult.success && parseResult.schema) {
-        parsedSchemaRef.current = parseResult.schema;
+        schemaRef.current = parseResult.schema;
       } else {
         console.warn("Failed to parse template:", parseResult.errors);
-        parsedSchemaRef.current = null;
+        schemaRef.current = null;
       }
       lastTemplateRef.current = template;
     } else if (!template && lastTemplateRef.current !== undefined) {
       // Template was removed
-      parsedSchemaRef.current = null;
+      schemaRef.current = null;
       lastTemplateRef.current = undefined;
     }
   }, [template]);
 
   // Determine effective schema
-  const effectiveSchema = schema || parsedSchemaRef.current;
+  const effectiveSchema = schemaRef.current;
 
   if (!effectiveSchema) {
     return null;

@@ -5,12 +5,6 @@ export const taskListItem: Omit<Widget, "id"> = {
   description: "An elegant task list item with priority badge and due date",
   template: `<Card size="md" padding="md">
   <Row align="center" gap={3}>
-    <Box>
-      <Badge variant={data.priority === "high" ? "destructive" : data.priority === "medium" ? "warning" : "success"}>
-        {data.priority}
-      </Badge>
-    </Box>
-    
     <Col gap={1} minWidth="auto">
       <Title level="h4">{data.title}</Title>
       <Text color="muted" size="sm">{data.description}</Text>
@@ -18,7 +12,7 @@ export const taskListItem: Omit<Widget, "id"> = {
     
     <Spacer />
     
-    <Col align="end" gap={1}>
+    <Col align="end" gap={1} shrink="0">
       <Caption>Due Date</Caption>
       <Text size="sm" weight="medium">{data.dueDate}</Text>
     </Col>
@@ -27,12 +21,14 @@ export const taskListItem: Omit<Widget, "id"> = {
   <Divider margin="sm" />
   
   <Row align="center" gap={2}>
-    <Image 
-      src={data.assignee.avatar}
-      size={24}
-      radius="full"
-    />
-    <Text size="sm" color="muted">{data.assignee.name}</Text>
+    <Row shrink="0" align="center" gap={1}>
+      <Image 
+        src={data.assignee.avatar}
+        size={24}
+        radius="full"
+      />
+      <Text size="sm" color="muted">{data.assignee.name}</Text>
+    </Row>
     <Spacer />
     <Progress value={data.progress} size="sm" />
     <Text size="sm" weight="medium">{data.progress}%</Text>
@@ -49,9 +45,9 @@ export const taskListItem: Omit<Widget, "id"> = {
         progress: 65,
         assignee: {
           name: "Mike Chen",
-          avatar: "https://picsum.photos/150/150?random=3"
-        }
-      }
-    }
-  ]
+          avatar: "https://picsum.photos/150/150?random=3",
+        },
+      },
+    },
+  ],
 };

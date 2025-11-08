@@ -17,21 +17,26 @@ import {
   Width,
   Height,
   Size,
+  Justify,
+  Grow,
+  Shrink,
 } from "./variants";
 
-
-const Base = cva("flex flex-row mt-4", {
+const Base = cva("flex flex-row", {
   variants: {},
   defaultVariants: {},
 });
 
 const Variants = variants({
+  flex: Flex,
   align: Align,
+  justify: Justify,
   padding: Padding,
+  grow: Grow,
+  shrink: Shrink,
   background: Background,
   border: Border,
   radius: Radius,
-  flex: Flex,
   gap: Gap,
   width: Width,
   height: Height,
@@ -49,6 +54,9 @@ const Row = React.forwardRef<HTMLDivElement, RowProps>(
       children,
       style,
       align,
+      justify,
+      grow,
+      shrink,
       padding,
       background,
       border,
@@ -64,7 +72,10 @@ const Row = React.forwardRef<HTMLDivElement, RowProps>(
   ) => {
     const [variantClasses, variantStyles] = Variants.format({
       align,
+      justify,
       padding,
+      grow,
+      shrink,
       background,
       border,
       radius,

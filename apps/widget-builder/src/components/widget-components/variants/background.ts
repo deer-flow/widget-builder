@@ -32,7 +32,7 @@ export const Background: Variant = {
   },
 
   // Format method to handle background colors
-  format: (background: BackgroundProps["background"]): string => {
+  format: (background: BackgroundProps["background"]): string | [string, React.CSSProperties] => {
     if (background === undefined) return "";
 
     if (typeof background === "string") {
@@ -41,7 +41,7 @@ export const Background: Variant = {
       }
 
       // Otherwise treat as arbitrary CSS value
-      return `bg-[${background}]`;
+      return ["", { background }];
     }
 
     return "";

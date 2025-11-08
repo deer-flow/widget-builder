@@ -4,10 +4,10 @@ export const calendarEvent: Omit<Widget, "id"> = {
   name: "Calendar Event",
   description: "An event card showing meeting details and participants",
   template: `<Card size="md" padding="md">
-  <Row align="center" gap={2}>
-    <Box background="blue-500" padding="md" radius="md">
+  <Row align="center" gap={2} maxWidth="full">
+    <Box background="sky-500" padding="sm" radius="md">
       <Col align="center" gap={0}>
-        <Text color="white" size="xs" weight="medium">{data.month}</Text>
+        <Text size="xs" color="white" weight="medium">{data.month}</Text>
         <Title level="h2" color="white">{data.day}</Title>
       </Col>
     </Box>
@@ -15,13 +15,13 @@ export const calendarEvent: Omit<Widget, "id"> = {
     <Col gap={1} minWidth="auto">
       <Title level="h4">{data.title}</Title>
       <Row align="center" gap={2}>
-        <Text color="muted" size="sm">🕐 {data.time}</Text>
-        <Text color="muted" size="sm">📍 {data.location}</Text>
+        <Text variant="muted" size="sm">🕐 {data.time}</Text>
+        <Text variant="muted" size="sm">📍 {data.location}</Text>
       </Row>
     </Col>
   </Row>
   
-  <Divider margin="md" />
+  <Divider margin={{y: "md"}} />
   
   <Col gap={2}>
     <Text size="sm" color="muted">{data.description}</Text>
@@ -61,10 +61,10 @@ export const calendarEvent: Omit<Widget, "id"> = {
         participants: [
           { avatar: "https://picsum.photos/150/150?random=6" },
           { avatar: "https://picsum.photos/150/150?random=7" },
-          { avatar: "https://picsum.photos/150/150?random=8" }
+          { avatar: "https://picsum.photos/150/150?random=8" },
         ],
-        moreParticipants: "5"
-      }
-    }
-  ]
+        moreParticipants: "5",
+      },
+    },
+  ],
 };

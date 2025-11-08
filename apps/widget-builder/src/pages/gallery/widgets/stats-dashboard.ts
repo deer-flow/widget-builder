@@ -14,19 +14,19 @@ export const statsDashboard: Omit<Widget, "id"> = {
     </Badge>
   </Row>
   
-  <Divider margin="md" />
+  <Divider margin={{y: "md"}} />
   
   <Row gap={4}>
     <Col gap={1} minWidth="auto">
       <Caption>This Month</Caption>
       <Title level="h4">{data.thisMonth}</Title>
-      <Text size="sm" color="muted">+{data.monthGrowth}% from last month</Text>
+      <Text size="sm" variant="muted">+{data.monthGrowth}% from last month</Text>
     </Col>
     <Spacer />
     <Col gap={1} align="end">
       <Caption>Goal</Caption>
       <Title level="h4">{data.goal}</Title>
-      <Progress value={data.progress} />
+      <Progress value={data.progress} size="sm" />
     </Col>
   </Row>
 </Card>`,
@@ -40,8 +40,8 @@ export const statsDashboard: Omit<Widget, "id"> = {
         thisMonth: "$12,450",
         monthGrowth: "18",
         goal: "$15,000",
-        progress: 83
-      }
-    }
-  ]
+        progress: 83,
+      },
+    },
+  ],
 };

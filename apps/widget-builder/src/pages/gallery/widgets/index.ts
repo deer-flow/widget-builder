@@ -22,9 +22,9 @@ export const galleryWidgets: GalleryWidget[] = [
   { widget: notificationCard },
   { widget: weatherWidget },
   { widget: statsDashboard },
-  { widget: productCard },
   { widget: musicPlayer },
   { widget: socialMediaPost },
   { widget: calendarEvent },
   { widget: emailPreview },
+  { widget: productCard },
 ];

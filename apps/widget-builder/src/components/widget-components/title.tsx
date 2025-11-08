@@ -4,6 +4,8 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
+import { FontSize, FontWeight, TextColor, variants, VariantsProps } from "./variants";
+
 const Base = cva("font-semibold text-foreground", {
   variants: {
     level: {
@@ -14,30 +16,41 @@ const Base = cva("font-semibold text-foreground", {
       h5: "text-lg lg:text-xl",
       h6: "text-base lg:text-lg",
     },
-    weight: {
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-    },
   },
   defaultVariants: {
     level: "h3",
-    weight: "semibold",
   },
 });
 
-export interface TitleProps extends React.HTMLAttributes<HTMLHeadingElement>, VariantProps<typeof Base> {
+const Variants = variants({
+  weight: FontWeight,
+  size: FontSize,
+  color: TextColor,
+});
+
+export interface TitleProps
+  extends React.HTMLAttributes<HTMLHeadingElement>,
+    VariantProps<typeof Base>,
+    VariantsProps<typeof Variants> {
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   children: React.ReactNode;
 }
 
 const Title = React.forwardRef<HTMLHeadingElement, TitleProps>(
-  ({ className, level, weight, as, children, ...props }, ref) => {
+  ({ className, level, weight, size, color, as, children, style, ...props }, ref) => {
     const Component = as || level || "h3"; // Default to h3 if no level or as prop is provided);
 
+    const [variantClasses, variantStyles] = Variants.format({ weight, size, color });
     return (
-      <Component className={cn(Base({ level, weight, className }))} ref={ref} {...props}>
+      <Component
+        className={cn(Base({ level, className }), variantClasses)}
+        style={{
+          ...variantStyles,
+          ...style,
+        }}
+        ref={ref}
+        {...props}
+      >
         {children}
       </Component>
     );

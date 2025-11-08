@@ -3,7 +3,7 @@ import { Widget } from "@deer-flow/widget";
 export const musicPlayer: Omit<Widget, "id"> = {
   name: "Music Player",
   description: "A compact music player widget with controls",
-  template: `<Card size="md" padding="lg" background="gradient-to-br from-purple-500 to-pink-500">
+  template: `<Card size="md" padding="lg" background="linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
   <Row align="center" gap={3}>
     <Image 
       src={data.albumArt}
@@ -18,12 +18,9 @@ export const musicPlayer: Omit<Widget, "id"> = {
     </Col>
   </Row>
   
-  <Box margin="md">
-    <Progress value={data.progress} />
-    <Row justify="between" margin="xs">
-      <Caption color="white">{data.currentTime}</Caption>
-      <Caption color="white">{data.duration}</Caption>
-    </Row>
+  <Box margin={{y: "md"}} align="center" gap="2">
+    <Progress value={data.progress} color="secondary" size="sm" />
+    <Caption color="white">{data.currentTime}</Caption>
   </Box>
   
   <Row gap={2} justify="center" align="center">
@@ -43,8 +40,8 @@ export const musicPlayer: Omit<Widget, "id"> = {
         currentTime: "2:34",
         duration: "4:12",
         progress: 62,
-        playing: true
-      }
-    }
-  ]
+        playing: true,
+      },
+    },
+  ],
 };

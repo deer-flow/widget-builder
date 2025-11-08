@@ -1,3 +1,5 @@
+import { ColorVariant } from "./color";
+
 // Font size variants
 export const FontSizeVariant = {
   xs: "text-xs",
@@ -35,14 +37,15 @@ export const TextAlignVariant = {
 
 // Text color variants
 export const TextColorVariant = {
-  prose: "text-foreground",
-  primary: "text-primary",
-  emphasis: "text-foreground",
-  secondary: "text-muted-foreground",
-  tertiary: "text-muted-foreground/60",
-  success: "text-green-600",
-  warning: "text-yellow-600",
-  danger: "text-red-600",
+  prose: "foreground",
+  primary: "primary",
+  emphasis: "foreground",
+  secondary: "muted-foreground",
+  tertiary: "muted-foreground/60",
+  success: "green-600",
+  warning: "yellow-600",
+  danger: "red-600",
+  ...ColorVariant,
 } as const;
 
 export interface TypographyProps {
@@ -58,12 +61,9 @@ export const FontSize = {
     name: "size",
     type: '"xs" | "sm" | "md" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "8xl" | "9xl" | number',
     required: false,
-    description:
-      "Font size; accepts a font size token or a custom px number value.",
+    description: "Font size; accepts a font size token or a custom px number value.",
   },
-  format: (
-    fontSize: TypographyProps["fontSize"]
-  ): string | [string, React.CSSProperties] => {
+  format: (fontSize: TypographyProps["fontSize"]): string | [string, React.CSSProperties] => {
     if (fontSize === undefined) return "";
     if (typeof fontSize === "number") {
       return ["", { fontSize: `${fontSize}px` }];
@@ -81,8 +81,7 @@ export const FontWeight = {
     name: "weight",
     type: '"normal" | "medium" | "semibold" | "bold" | number',
     required: false,
-    description:
-      "Font weight; accepts a font weight token or a custom numeric value (100-900).",
+    description: "Font weight; accepts a font weight token or a custom numeric value (100-900).",
   },
   format: (fontWeight: TypographyProps["fontWeight"]): string => {
     if (fontWeight === undefined) return "";
@@ -119,13 +118,12 @@ export const TextColor = {
     name: "color",
     type: '"prose" | "primary" | "emphasis" | "secondary" | "tertiary" | "success" | "warning" | "danger" | string',
     required: false,
-    description:
-      "Text color; accepts a text color token or a custom color string.",
+    description: "Text color; accepts a text color token or a custom color string.",
   },
   format: (textColor: TypographyProps["textColor"]): string => {
     if (textColor === undefined) return "";
     if (TextColor.variant.hasOwnProperty(textColor)) {
-      return TextColor.variant[textColor as keyof typeof TextColor.variant];
+      return `text-${TextColor.variant[textColor as keyof typeof TextColor.variant]}`;
     }
     return textColor;
   },
@@ -144,7 +142,7 @@ export const Truncate = {
   },
   format: (truncate: boolean | undefined): string => {
     if (truncate) {
-      return "truncate";
+      return "truncate block";
     }
     return "";
   },
