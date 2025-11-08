@@ -59,9 +59,9 @@ export const calendarEvent: Omit<Widget, "id"> = {
         location: "Conference Room A",
         description: "Weekly team sync to discuss project progress and upcoming milestones",
         participants: [
-          { avatar: "https://i.pravatar.cc/150?img=6" },
-          { avatar: "https://i.pravatar.cc/150?img=7" },
-          { avatar: "https://i.pravatar.cc/150?img=8" }
+          { avatar: "https://picsum.photos/150/150?random=6" },
+          { avatar: "https://picsum.photos/150/150?random=7" },
+          { avatar: "https://picsum.photos/150/150?random=8" }
         ],
         moreParticipants: "5"
       }

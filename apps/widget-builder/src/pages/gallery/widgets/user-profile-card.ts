@@ -46,7 +46,7 @@ export const userProfileCard: Omit<Widget, "id"> = {
     {
       name: "Default",
       data: {
-        avatar: "https://i.pravatar.cc/150?img=1",
+        avatar: "https://picsum.photos/150/150?random=1",
         name: "Sarah Anderson",
         role: "Product Designer",
         location: "San Francisco, CA",

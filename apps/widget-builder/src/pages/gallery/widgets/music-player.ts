@@ -36,7 +36,7 @@ export const musicPlayer: Omit<Widget, "id"> = {
     {
       name: "Default",
       data: {
-        albumArt: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400",
+        albumArt: "https://picsum.photos/400/400?random=20",
         title: "Midnight Dreams",
         artist: "Luna Rivers",
         album: "Neon Nights",

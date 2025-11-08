@@ -49,7 +49,7 @@ export const taskListItem: Omit<Widget, "id"> = {
         progress: 65,
         assignee: {
           name: "Mike Chen",
-          avatar: "https://i.pravatar.cc/150?img=3"
+          avatar: "https://picsum.photos/150/150?random=3"
         }
       }
     }

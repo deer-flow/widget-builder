@@ -52,11 +52,11 @@ export const socialMediaPost: Omit<Widget, "id"> = {
       data: {
         author: {
           name: "Alex Johnson",
-          avatar: "https://i.pravatar.cc/150?img=5"
+          avatar: "https://picsum.photos/150/150?random=5"
         },
         timestamp: "2 hours ago",
         content: "Just launched our new product! Excited to share this journey with you all. 🚀",
-        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600",
+        image: "https://picsum.photos/600/400?random=30",
         likes: "234",
         comments: "45",
         shares: "12"

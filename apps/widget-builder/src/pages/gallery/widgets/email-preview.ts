@@ -50,7 +50,7 @@ export const emailPreview: Omit<Widget, "id"> = {
         sender: {
           name: "Emma Wilson",
           email: "emma@company.com",
-          avatar: "https://i.pravatar.cc/150?img=9"
+          avatar: "https://picsum.photos/150/150?random=9"
         },
         subject: "Q4 Marketing Strategy Review",
         preview: "Hi team, I've prepared the Q4 marketing strategy document. Please review the attached presentation and share your feedback before Friday's meeting...",

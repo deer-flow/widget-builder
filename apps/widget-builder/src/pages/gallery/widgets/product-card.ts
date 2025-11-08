@@ -38,7 +38,7 @@ export const productCard: Omit<Widget, "id"> = {
     {
       name: "Default",
       data: {
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+        image: "https://picsum.photos/400/400?random=10",
         name: "Wireless Headphones",
         description: "Premium noise-cancelling headphones with 30h battery life",
         category: "Audio",
