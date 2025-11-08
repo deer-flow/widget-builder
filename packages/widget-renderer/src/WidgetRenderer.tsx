@@ -1,5 +1,5 @@
 import { JSXElementSchema, executeExpression, parseJSXTemplate } from "@deer-flow/widget";
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { ComponentType } from "react";
 
 export type WidgetRendererProps = {
@@ -24,17 +24,30 @@ function resolveValue(value: JSXElementSchema["value"], data: Record<string, unk
 }
 
 export function WidgetRenderer({ schema, components, data, template }: WidgetRendererProps): React.ReactElement | null {
-  // If schema is not provided but template is, parse the template to get the schema
-  let effectiveSchema = schema;
-  if (!effectiveSchema && template) {
-    const parseResult = parseJSXTemplate(template);
-    if (parseResult.success && parseResult.schema) {
-      effectiveSchema = parseResult.schema;
-    } else {
-      console.warn("Failed to parse template:", parseResult.errors);
-      return null;
+  // Cache the parsed schema to avoid re-parsing on every render
+  const parsedSchemaRef = useRef<JSXElementSchema | null>(null);
+  const lastTemplateRef = useRef<string | undefined>(undefined);
+
+  // Parse template only when it changes
+  useEffect(() => {
+    if (template && template !== lastTemplateRef.current) {
+      const parseResult = parseJSXTemplate(template);
+      if (parseResult.success && parseResult.schema) {
+        parsedSchemaRef.current = parseResult.schema;
+      } else {
+        console.warn("Failed to parse template:", parseResult.errors);
+        parsedSchemaRef.current = null;
+      }
+      lastTemplateRef.current = template;
+    } else if (!template && lastTemplateRef.current !== undefined) {
+      // Template was removed
+      parsedSchemaRef.current = null;
+      lastTemplateRef.current = undefined;
     }
-  }
+  }, [template]);
+
+  // Determine effective schema
+  const effectiveSchema = schema || parsedSchemaRef.current;
 
   if (!effectiveSchema) {
     return null;
