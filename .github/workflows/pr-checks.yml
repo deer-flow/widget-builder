@@ -1,16 +1,14 @@
-name: Deploy to GitHub Pages
+name: Pull Request Checks
 
 on:
-  push:
+  pull_request:
     branches: [main]
 
 jobs:
-  build-and-deploy:
+  checks:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pages: write
-      id-token: write
 
     steps:
       - name: Checkout
@@ -40,24 +38,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build packages
-        run: pnpm run build
+      - name: Build
+        run: pnpm build
 
-      - name: Add SPA 404 fallback
-        shell: bash
-        run: |
-          if [ -d "./apps/widget-builder/dist" ]; then
-            cp ./apps/widget-builder/dist/index.html ./apps/widget-builder/dist/404.html || true
-          fi
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./apps/widget-builder/dist
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Lint
+        run: pnpm lint
