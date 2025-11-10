@@ -304,4 +304,89 @@ describe("executeExpression", () => {
       );
     });
   });
+
+  describe("Action callback", () => {
+    it("should invoke action callback with correct parameters", () => {
+      const data = { id: 123 };
+      const actionMock = vi.fn();
+
+      executeExpression(
+        "action({ type: 'test.action', payload: data.id })",
+        data,
+        actionMock
+      );
+
+      expect(actionMock).toHaveBeenCalledWith({
+        type: "test.action",
+        payload: 123,
+      });
+    });
+
+    it("should return a function that can be used as event handler", () => {
+      const data = { userId: 456, action: "click" };
+      const actionMock = vi.fn();
+
+      const handler = executeExpression(
+        "() => action({ type: 'user.click', payload: data.userId })",
+        data,
+        actionMock
+      );
+
+      expect(typeof handler).toBe("function");
+      if (typeof handler === "function") {
+        handler();
+        expect(actionMock).toHaveBeenCalledWith({
+          type: "user.click",
+          payload: 456,
+        });
+      }
+    });
+
+    it("should work with complex payload objects", () => {
+      const data = {
+        user: { id: 123, name: "John" },
+        timestamp: Date.now(),
+      };
+      const actionMock = vi.fn();
+
+      executeExpression(
+        "action({ type: 'user.submit', payload: { user: data.user, timestamp: data.timestamp } })",
+        data,
+        actionMock
+      );
+
+      expect(actionMock).toHaveBeenCalledWith({
+        type: "user.submit",
+        payload: {
+          user: { id: 123, name: "John" },
+          timestamp: data.timestamp,
+        },
+      });
+    });
+
+    it("should handle missing action callback gracefully", () => {
+      const data = { id: 123 };
+
+      // Should not throw even without action callback
+      expect(() => {
+        executeExpression("action({ type: 'test.action', payload: data.id })", data);
+      }).not.toThrow();
+    });
+
+    it("should allow action in conditional expressions", () => {
+      const data = { shouldAct: true, id: 789 };
+      const actionMock = vi.fn();
+
+      executeExpression(
+        "data.shouldAct ? action({ type: 'conditional.action', payload: data.id }) : null",
+        data,
+        actionMock
+      );
+
+      expect(actionMock).toHaveBeenCalledWith({
+        type: "conditional.action",
+        payload: 789,
+      });
+    });
+  });
 });

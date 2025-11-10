@@ -182,6 +182,11 @@ export const WidgetBuilder = () => {
                   schema={currentWidget.uiSchema}
                   components={components}
                   data={currentWidget.states?.[Number(activeState)]?.data ?? {}}
+                  onAction={(action) => {
+                    console.log("Action triggered:", action);
+                    // Handle actions from widgets here
+                    // You can dispatch Redux actions, call APIs, etc.
+                  }}
                 />
               </ErrorBoundary>
             </div>
