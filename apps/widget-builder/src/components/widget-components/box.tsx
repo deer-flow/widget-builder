@@ -17,6 +17,7 @@ import {
   Shrink,
   Margin,
   Gap,
+  Hidden,
 } from "./variants";
 
 const Variants = variants({
@@ -31,6 +32,7 @@ const Variants = variants({
   grow: Grow,
   shrink: Shrink,
   gap: Gap,
+  hidden: Hidden,
 });
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement>, VariantsProps<typeof Variants> {
@@ -55,10 +57,16 @@ const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       grow,
       shrink,
       gap,
+      hidden,
       ...props
     },
     ref
   ) => {
+    // Return null if hidden is true
+    if (hidden) {
+      return null;
+    }
+    
     // Merge with existing style prop
     const [variantClasses, variantStyles] = Variants.format({
       size,

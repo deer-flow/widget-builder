@@ -18,6 +18,7 @@ import {
   Grow,
   Shrink,
   Gap,
+  Hidden,
 } from "./variants";
 
 const Base = cva("flex flex-col", {
@@ -37,6 +38,7 @@ const Variants = variants({
   gap: Gap,
   minWidth: MinWidth,
   minHeight: MinHeight,
+  hidden: Hidden,
 });
 
 export interface ColProps extends React.HTMLAttributes<HTMLDivElement>, VariantsProps<typeof Variants> {
@@ -60,10 +62,16 @@ const Col = React.forwardRef<HTMLDivElement, ColProps>(
       gap,
       minWidth,
       minHeight,
+      hidden,
       ...props
     },
     ref
   ) => {
+    // Return null if hidden is true
+    if (hidden) {
+      return null;
+    }
+    
     const [variantClasses, variantStyles] = Variants.format({
       align,
       padding,

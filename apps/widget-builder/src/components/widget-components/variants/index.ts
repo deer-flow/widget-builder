@@ -11,6 +11,7 @@ export * from "./radius";
 export * from "./background";
 export * from "./border";
 export * from "./flex";
+export * from "./hidden";
 
 /**
  * Utility to combine multiple variant to a single object

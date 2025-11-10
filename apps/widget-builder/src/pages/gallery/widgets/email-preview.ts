@@ -12,7 +12,7 @@ export const emailPreview: Omit<Widget, "id"> = {
     />
     <Col gap={0} minWidth="auto">
       <Text weight="medium">{data.sender.name}</Text>
-      {data.unread && <Badge variant="default" size="sm">New</Badge>}
+      <Badge variant="default" size="sm" hidden={!data.unread}>New</Badge>
       <Text color="muted" size="sm">{data.sender.email}</Text>
     </Col>
     <Spacer />

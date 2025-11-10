@@ -21,6 +21,7 @@ import {
   Grow,
   Shrink,
   Margin,
+  Hidden,
 } from "./variants";
 
 const Base = cva("flex flex-row", {
@@ -43,6 +44,7 @@ const Variants = variants({
   width: Width,
   height: Height,
   size: Size,
+  hidden: Hidden,
 });
 
 export interface RowProps extends React.HTMLAttributes<HTMLDivElement>, VariantsProps<typeof Variants> {
@@ -69,10 +71,16 @@ const Row = React.forwardRef<HTMLDivElement, RowProps>(
       width,
       height,
       size,
+      hidden,
       ...props
     },
     ref
   ) => {
+    // Return null if hidden is true
+    if (hidden) {
+      return null;
+    }
+    
     const [variantClasses, variantStyles] = Variants.format({
       align,
       justify,

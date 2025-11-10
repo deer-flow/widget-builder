@@ -32,9 +32,15 @@ const Base = cva(
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof Base> {
   children: React.ReactNode;
+  hidden?: boolean;
 }
 
-const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(({ className, variant, size, ...props }, ref) => {
+const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(({ className, variant, size, hidden, ...props }, ref) => {
+  // Return null if hidden is true
+  if (hidden) {
+    return null;
+  }
+  
   return <div className={cn(Base({ variant, size, className }))} ref={ref} {...props} />;
 });
 Badge.displayName = "Badge";
@@ -59,6 +65,12 @@ const BadgeDefinition: ComponentDefinition = {
       name: "children",
       type: "React.ReactNode",
       description: "Content to display inside the badge.",
+    },
+    {
+      name: "hidden",
+      type: "boolean",
+      required: false,
+      description: "When true, hides the component by returning null.",
     },
   ],
   category: "Display",

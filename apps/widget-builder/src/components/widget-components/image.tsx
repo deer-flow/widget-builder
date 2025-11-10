@@ -4,7 +4,7 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
-import { variants, Margin, Radius, Size, VariantsProps } from "./variants";
+import { variants, Margin, Radius, Size, VariantsProps, Hidden } from "./variants";
 
 
 const Base = cva("object-cover", {
@@ -41,6 +41,7 @@ const Variants = variants({
   radius: Radius,
   margin: Margin,
   size: Size,
+  hidden: Hidden,
 });
 
 export interface ImageProps
@@ -51,8 +52,13 @@ export interface ImageProps
 }
 
 const Image = React.forwardRef<HTMLImageElement, ImageProps>(
-  ({ className, style, fit, aspect, position, fallback, radius, margin, size, onError, ...props }, ref) => {
+  ({ className, style, fit, aspect, position, fallback, radius, margin, size, hidden, onError, ...props }, ref) => {
     const [imageError, setImageError] = React.useState(false);
+
+    // Return null if hidden is true
+    if (hidden) {
+      return null;
+    }
 
     const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
       setImageError(true);
