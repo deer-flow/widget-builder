@@ -27,12 +27,10 @@ export const emailPreview: Omit<Widget, "id"> = {
     {data.preview}
   </Text>
   
-  {data.hasAttachment && (
-    <Row align="center" gap={1} margin="sm">
-      <Text size="sm">📎</Text>
-      <Text size="sm" color="muted">{data.attachmentCount} attachment{data.attachmentCount > 1 ? "s" : ""}</Text>
-    </Row>
-  )}
+  <Row align="center" gap={1} margin="sm">
+    <Text size="sm">📎</Text>
+    <Text size="sm" color="muted">{data.attachmentCount} attachment{data.attachmentCount > 1 ? "s" : ""}</Text>
+  </Row>
 
   <Divider margin={{y: "sm"}} />
 

@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { JSXLanguage, JSXLanguageOptions } from "../jsx";
 
 export function useJSXLanguage(options: JSXLanguageOptions) {
+  const [, setTick] = useState(() => 0); // Trigger re-render when options change
   const jsxLanguageRef = useRef<JSXLanguage | null>(null);
 
   if (!jsxLanguageRef.current) {
@@ -14,6 +15,7 @@ export function useJSXLanguage(options: JSXLanguageOptions) {
   useEffect(() => {
     if (options.dataSchema) {
       jsxLanguageRef.current?.updateDataTypes(options.dataSchema);
+      setTick((tick) => tick + 1);
     }
   }, [options.dataSchema]);
 

@@ -18,12 +18,14 @@ export type JSXLanguageOptions = {
 export class JSXLanguage {
   private readonly componentTypesLib: string;
 
+  private globalTypesModel: Monaco.editor.ITextModel | null = null;
+
   private jsxHighlighter: MonacoJsxSyntaxHighlight | null = null;
   private completionDisposable: Monaco.IDisposable | null = null;
-  private dataTypesDisposable: Monaco.IDisposable | null = null;
   private jsxCompletionDisposable: Monaco.IDisposable | null = null;
   private _dataSchema: JSONSchema4 | null = null;
   private monaco: typeof Monaco | null = null;
+  private editor: Monaco.editor.IStandaloneCodeEditor | null = null;
 
   constructor(readonly options: JSXLanguageOptions) {
     // Generate component type declarations
@@ -34,13 +36,19 @@ export class JSXLanguage {
 
   setup(editor: Monaco.editor.IStandaloneCodeEditor, monaco: typeof Monaco) {
     this.monaco = monaco;
-
+    this.editor = editor;
     const model = editor.getModel();
 
     // Force the model to use TypeScript for proper JSX support
     if (!model) {
       return;
     }
+
+    this.globalTypesModel = monaco.editor.createModel(
+      `export {}`,
+      "typescript",
+      monaco.Uri.parse("file://typescript/types/globals.d.ts")
+    );
 
     // Set TypeScript compiler options
     this.setupTypeScriptOptions(monaco);
@@ -58,9 +66,6 @@ export class JSXLanguage {
       if (this.completionDisposable) {
         this.completionDisposable.dispose();
       }
-      if (this.dataTypesDisposable) {
-        this.dataTypesDisposable.dispose();
-      }
       if (this.jsxCompletionDisposable) {
         this.jsxCompletionDisposable.dispose();
       }
@@ -71,22 +76,17 @@ export class JSXLanguage {
 
   updateDataTypes(schema: JSONSchema4) {
     this._dataSchema = schema;
-    if (!this.monaco) {
+    if (!this.monaco || !this.editor) {
       return;
     }
-    const tsDefaults = this.monaco.languages.typescript.typescriptDefaults;
-    const dataTypesUri = "file:///data-types.d.ts";
 
     try {
-      // Remove old data types if exists
-      if (this.dataTypesDisposable) {
-        this.dataTypesDisposable.dispose();
-      }
-
       const typeDefinitions = generateDataTypes(schema);
-      // Add the new type definitions to both TS and JS defaults
-      this.dataTypesDisposable = tsDefaults.addExtraLib(typeDefinitions, dataTypesUri);
-
+      this.globalTypesModel?.setValue(typeDefinitions);
+      const editorModel = this.editor?.getModel();
+      if (editorModel) {
+        editorModel.setValue(editorModel.getValue());
+      }
       console.log("JSXLanguage: Updated data schema types", typeDefinitions);
     } catch (error) {
       console.error("JSXLanguage: Error updating data schema types:", error);
@@ -218,6 +218,7 @@ export class JSXLanguage {
       allowJs: true,
       checkJs: true,
       moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+      moduleDetection: 3,
       esModuleInterop: true,
       skipLibCheck: false,
       strict: true,
@@ -226,6 +227,7 @@ export class JSXLanguage {
       lib: ["ES2020", "DOM"],
       noImplicitAny: true,
       strictNullChecks: true,
+      typeRoots: ["/types"],
     };
 
     const customOptions = this.options.setupCompilerOptions?.(monaco) || {};
@@ -261,7 +263,7 @@ export class JSXLanguage {
     // Add data type definitions (if present)
     if (this._dataSchema) {
       const dataTypesContent = generateDataTypes(this._dataSchema);
-      this.dataTypesDisposable = tsDefaults.addExtraLib(dataTypesContent, "file:///data-types.d.ts");
+      this.globalTypesModel?.setValue(dataTypesContent);
     }
   }
 }

@@ -20,6 +20,7 @@ import {
   Justify,
   Grow,
   Shrink,
+  Margin,
 } from "./variants";
 
 const Base = cva("flex flex-row", {
@@ -31,6 +32,7 @@ const Variants = variants({
   flex: Flex,
   align: Align,
   justify: Justify,
+  margin: Margin,
   padding: Padding,
   grow: Grow,
   shrink: Shrink,
@@ -57,6 +59,7 @@ const Row = React.forwardRef<HTMLDivElement, RowProps>(
       justify,
       grow,
       shrink,
+      margin,
       padding,
       background,
       border,
@@ -73,6 +76,7 @@ const Row = React.forwardRef<HTMLDivElement, RowProps>(
     const [variantClasses, variantStyles] = Variants.format({
       align,
       justify,
+      margin,
       padding,
       grow,
       shrink,

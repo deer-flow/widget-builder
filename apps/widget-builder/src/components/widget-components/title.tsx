@@ -68,17 +68,7 @@ const TitleDefinition: ComponentDefinition = {
       description: "The level of the title, determining its size.",
       defaultValue: '"h3"',
     },
-    {
-      name: "weight",
-      type: '"normal" | "medium" | "semibold" | "bold"',
-      description: "The font weight of the title.",
-      defaultValue: '"semibold"',
-    },
-    {
-      name: "children",
-      type: "React.ReactNode",
-      description: "The content of the title.",
-    },
+    ...Variants.definitions,
   ],
   category: "Typography",
   usage: `<Title level="h2" weight="bold">This is a Level 2 Bold Title</Title>`,
