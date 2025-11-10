@@ -39,24 +39,24 @@ export function WidgetRenderer({ schema, components, data, template }: WidgetRen
 
   // Parse template only when it changes
   useEffect(() => {
-    if (template && template !== lastTemplateRef.current) {
-      const parseResult = parseJSXTemplate(template);
-      if (parseResult.success && parseResult.schema) {
-        schemaRef.current = parseResult.schema;
+    if (template !== lastTemplateRef.current) {
+      if (template) {
+        const parseResult = parseJSXTemplate(template);
+        if (parseResult.success && parseResult.schema) {
+          schemaRef.current = parseResult.schema;
+        } else {
+          console.warn("Failed to parse template:", parseResult.errors);
+          schemaRef.current = null;
+        }
       } else {
-        console.warn("Failed to parse template:", parseResult.errors);
         schemaRef.current = null;
       }
       lastTemplateRef.current = template;
-    } else if (!template && lastTemplateRef.current !== undefined) {
-      // Template was removed
-      schemaRef.current = null;
-      lastTemplateRef.current = undefined;
     }
   }, [template]);
 
   // Determine effective schema
-  const effectiveSchema = schemaRef.current;
+  const effectiveSchema = schema || schemaRef.current;
 
   if (!effectiveSchema) {
     return null;
