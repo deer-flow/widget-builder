@@ -8,6 +8,7 @@ import { Caption, CaptionDefinition } from "./caption";
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, CardDefinition } from "./card";
 import { Col, ColDefinition } from "./col";
 import { Divider, DividerDefinition } from "./divider";
+import { Icon, IconDefinition } from "./icon";
 import { Image, ImageDefinition } from "./image";
 import { Progress, ProgressDefinition } from "./progress";
 import { Row, RowDefinition } from "./row";
@@ -45,6 +46,7 @@ export const components: ComponentMap = {
   Divider,
   Spacer,
   Badge,
+  Icon,
   Image,
   Progress,
 };
@@ -65,6 +67,7 @@ export const definitions: ComponentDefinition[] = [
   DividerDefinition,
   SpacerDefinition,
   BadgeDefinition,
+  IconDefinition,
   ImageDefinition,
   ProgressDefinition,
 ];
