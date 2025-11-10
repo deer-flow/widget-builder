@@ -1,7 +1,12 @@
 /**
+ * Action callback type for handling events in widgets
+ */
+export type ActionCallback = (action: { type: string; payload?: unknown }) => void;
+
+/**
  * Create a simple sandbox environment to execute expressions
  */
-function createSandbox(data: Record<string, unknown>) {
+function createSandbox(data: Record<string, unknown>, action?: ActionCallback) {
   // Create a safe globals object
   const safeGlobals = {
     // Basic JavaScript constructors and objects
@@ -20,6 +25,8 @@ function createSandbox(data: Record<string, unknown>) {
     isFinite,
     // Data object
     data,
+    // Action function for handling events
+    action: action || (() => {}),
   };
 
   return safeGlobals;
@@ -28,10 +35,14 @@ function createSandbox(data: Record<string, unknown>) {
 /**
  * Execute expression within sandbox
  */
-export function executeExpression(expression: string, data: Record<string, unknown>): unknown {
+export function executeExpression(
+  expression: string,
+  data: Record<string, unknown>,
+  action?: ActionCallback
+): unknown {
   try {
     // Create sandbox environment
-    const sandbox = createSandbox(data);
+    const sandbox = createSandbox(data, action);
 
     // Create arrays of parameter names and values
     const paramNames = Object.keys(sandbox);
