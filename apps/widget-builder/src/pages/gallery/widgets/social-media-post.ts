@@ -22,12 +22,13 @@ export const socialMediaPost: Omit<Widget, "id"> = {
     <Text>{data.content}</Text>
   </Box>
   
-  {data.image && <Image 
+  <Image 
     src={data.image}
     aspect="video"
     radius="md"
     margin="sm"
-  />}
+    hidden={!data.image}
+  />
   
   <Divider margin="sm" />
   
