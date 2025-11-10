@@ -26,6 +26,13 @@ export const defaultWidgetTemplate: Omit<Widget, "id"> = {
       radius="full"
     />
   </Row>
+
+  <Button 
+    size="sm" 
+    onClick={action({type: "driver.contact", payload: data.driver.name})}
+  >
+    Contact Driver
+  </Button>
 </Card> 
     `,
   states: [

@@ -30,7 +30,7 @@ const ButtonDefinition: ComponentDefinition = {
     },
   ],
   category: "Controls",
-  usage: `<Button size="sm">
+  usage: `<Button size="sm" onClick={action({type: "button.click", payload: data.id})}>
   Click Me
 </Button>`,
 };
