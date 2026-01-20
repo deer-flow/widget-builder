@@ -10,6 +10,7 @@ export function generateDataTypes(schema: JSONSchema4): string {
     const interfaceBody = generateInterfaceBody(schema);
 
     return `
+declare function action(event: {type: string, payload?: unknown}): () => void;
 declare const data: {
 ${interfaceBody}
 };

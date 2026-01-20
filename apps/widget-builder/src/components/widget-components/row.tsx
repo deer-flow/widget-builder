@@ -47,7 +47,7 @@ const Variants = variants({
   hidden: Hidden,
 });
 
-export interface RowProps extends React.HTMLAttributes<HTMLDivElement>, VariantsProps<typeof Variants> {
+export interface RowProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "hidden">, VariantsProps<typeof Variants> {
   children?: React.ReactNode;
 }
 
@@ -80,7 +80,7 @@ const Row = React.forwardRef<HTMLDivElement, RowProps>(
     if (hidden) {
       return null;
     }
-    
+
     const [variantClasses, variantStyles] = Variants.format({
       align,
       justify,

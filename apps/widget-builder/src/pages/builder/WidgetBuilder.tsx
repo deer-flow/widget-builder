@@ -4,6 +4,7 @@ import { Download, PlusIcon } from "lucide-react";
 import { JSXEditor } from "monaco-jsx-editor";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { JSONEditor } from "@/components/JSONEditor";
@@ -186,6 +187,7 @@ export const WidgetBuilder = () => {
                     console.log("Action triggered:", action);
                     // Handle actions from widgets here
                     // You can dispatch Redux actions, call APIs, etc.
+                    toast.success(`Action triggered: ${action.type}`, { description: JSON.stringify(action.payload) });
                   }}
                 />
               </ErrorBoundary>

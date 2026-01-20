@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import { WidgetBuilder } from "@/pages/builder";
 import { WidgetComponents } from "@/pages/components";
 import { WidgetGallery } from "@/pages/gallery";
@@ -24,6 +25,7 @@ function App() {
           </div>
         </SidebarInset>
       </SidebarProvider>
+      <Toaster />
     </BrowserRouter>
   );
 }

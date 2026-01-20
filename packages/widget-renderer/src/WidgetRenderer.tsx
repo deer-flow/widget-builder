@@ -1,8 +1,6 @@
 import { JSXElementSchema, executeExpression, parseJSXTemplate, ActionCallback } from "@deer-flow/widget";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { ComponentType } from "react";
-
-import { ActionContext } from "./ActionContext";
 
 export type WidgetRendererProps = {
   schema?: JSXElementSchema;
@@ -73,13 +71,7 @@ function WidgetRendererInternal({
       // Recursively render children
       const children = schema.children
         ? schema.children.map((child, index) => (
-            <WidgetRendererInternal
-              key={index}
-              schema={child}
-              components={components}
-              data={data}
-              action={action}
-            />
+            <WidgetRendererInternal key={index} schema={child} components={components} data={data} action={action} />
           ))
         : undefined;
 
@@ -112,6 +104,17 @@ export function WidgetRenderer({
     }
   }
 
+  const handleAction = useCallback(
+    (action: { type: string; payload?: unknown }) => {
+      return () => {
+        if (onAction) {
+          onAction(action);
+        }
+      };
+    },
+    [onAction]
+  );
+
   // Parse template only when it changes
   useEffect(() => {
     if (template !== lastTemplateRef.current) {
@@ -138,13 +141,6 @@ export function WidgetRenderer({
   }
 
   return (
-    <ActionContext.Provider value={onAction}>
-      <WidgetRendererInternal
-        schema={effectiveSchema}
-        components={components}
-        data={data ?? {}}
-        action={onAction}
-      />
-    </ActionContext.Provider>
+    <WidgetRendererInternal schema={effectiveSchema} components={components} data={data ?? {}} action={handleAction} />
   );
 }

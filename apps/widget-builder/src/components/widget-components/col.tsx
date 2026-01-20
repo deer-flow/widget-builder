@@ -41,7 +41,7 @@ const Variants = variants({
   hidden: Hidden,
 });
 
-export interface ColProps extends React.HTMLAttributes<HTMLDivElement>, VariantsProps<typeof Variants> {
+export interface ColProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "hidden">, VariantsProps<typeof Variants> {
   children?: React.ReactNode;
 }
 
@@ -71,7 +71,7 @@ const Col = React.forwardRef<HTMLDivElement, ColProps>(
     if (hidden) {
       return null;
     }
-    
+
     const [variantClasses, variantStyles] = Variants.format({
       align,
       padding,

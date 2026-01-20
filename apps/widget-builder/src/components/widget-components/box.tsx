@@ -35,7 +35,7 @@ const Variants = variants({
   hidden: Hidden,
 });
 
-export interface BoxProps extends React.HTMLAttributes<HTMLDivElement>, VariantsProps<typeof Variants> {
+export interface BoxProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "hidden">, VariantsProps<typeof Variants> {
   as?: React.ElementType;
 }
 
@@ -66,7 +66,7 @@ const Box = React.forwardRef<HTMLDivElement, BoxProps>(
     if (hidden) {
       return null;
     }
-    
+
     // Merge with existing style prop
     const [variantClasses, variantStyles] = Variants.format({
       size,

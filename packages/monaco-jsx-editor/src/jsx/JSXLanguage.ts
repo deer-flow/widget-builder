@@ -85,6 +85,7 @@ export class JSXLanguage {
       this.globalTypesModel?.setValue(typeDefinitions);
       const editorModel = this.editor?.getModel();
       if (editorModel) {
+        // Trigger re-validation by resetting the model value
         editorModel.setValue(editorModel.getValue());
       }
       console.log("JSXLanguage: Updated data schema types", typeDefinitions);

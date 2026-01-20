@@ -18,7 +18,9 @@ const Icon = React.forwardRef<SVGSVGElement, IconProps>(({ name, color, size = 2
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join("");
 
-  const IconComponent = (LucideIcons as Record<string, React.ComponentType<LucideIcons.LucideProps>>)[iconName];
+  const IconComponent = (LucideIcons as unknown as Record<string, React.ComponentType<LucideIcons.LucideProps>>)[
+    iconName
+  ];
 
   if (!IconComponent) {
     // Return a placeholder if icon not found

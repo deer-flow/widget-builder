@@ -35,11 +35,7 @@ function createSandbox(data: Record<string, unknown>, action?: ActionCallback) {
 /**
  * Execute expression within sandbox
  */
-export function executeExpression(
-  expression: string,
-  data: Record<string, unknown>,
-  action?: ActionCallback
-): unknown {
+export function executeExpression(expression: string, data: Record<string, unknown>, action?: ActionCallback): unknown {
   try {
     // Create sandbox environment
     const sandbox = createSandbox(data, action);

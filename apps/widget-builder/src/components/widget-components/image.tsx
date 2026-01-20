@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 
 import { variants, Margin, Radius, Size, VariantsProps, Hidden } from "./variants";
 
-
 const Base = cva("object-cover", {
   variants: {
     fit: {
@@ -45,7 +44,7 @@ const Variants = variants({
 });
 
 export interface ImageProps
-  extends React.ImgHTMLAttributes<HTMLImageElement>,
+  extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "hidden">,
     VariantProps<typeof Base>,
     VariantsProps<typeof Variants> {
   fallback?: React.ReactNode;
