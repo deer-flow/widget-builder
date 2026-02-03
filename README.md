@@ -11,6 +11,7 @@ This project is a community-maintained clone for educational and development pur
 - **Monaco-based JSX editor:** Interactive code editor with JSX language support provided by the `monaco-jsx-editor` package — includes code completion (IntelliSense), context-aware suggestions, snippets, and syntax/error highlighting for a smoother authoring experience.
 - **JSON state editor:** Edit the widget's state in JSON format with real-time validation and error highlighting.
 - **Lightweight renderer:** Render parsed JSX-schema to React elements for live preview and testing.
+- **Preset Tailwind CSS style variants:** Quickly apply predefined Tailwind CSS styles to widget components for consistent and responsive design.
 
 ## Getting Started
 
